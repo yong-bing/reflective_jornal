@@ -1,0 +1,153 @@
+#verification_code_img {
+    cursor: pointer;
+    float: left;
+}
+
+.login, .register {
+    width: 380px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    position: fixed;
+    top: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.navbar-toggler.no-border {
+    border: none;
+}
+
+
+.btn.btn-outline-success.search {
+    margin-right: 10px;
+    border: none;
+}
+
+#offcanvasNavbarLight {
+    width: 320px;
+    border-bottom-left-radius: 15px;
+    border-top-left-radius: 15px;
+}
+
+#offcanvasNavbarLightLeft {
+    width: 320px;
+    border-bottom-right-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.web-title {
+    border-left: 25px;
+}
+
+@media (max-width: 767px) {
+    .sidebar {
+        display: none; /* 隐藏两侧列 */
+    }
+
+    .main-content {
+        width: 100%; /* 中间列占据全部宽度 */
+    }
+
+    .col-3 {
+        margin: 0 5px;
+    }
+}
+
+.user-avatar {
+    margin-right: 10px; /* 设置头像右侧的间距 */
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.offcanvas-title {
+    font-size: 1.25rem;
+}
+
+.user-email {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin: 0;
+}
+
+
+.category-block {
+    overflow: hidden;
+    white-space: nowrap;
+    background-color: #fff;
+    width: 100%;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.category-block:hover {
+    overflow: auto;
+    white-space: normal;
+}
+
+.category-block .category-item {
+    display: inline-block;
+    padding: 10px;
+}
+
+/* 背景样式 */
+.index-head {
+    background: #F8F9FA; /* 淡灰色背景 */
+    padding: 20px;
+}
+
+/* 卡片样式 */
+#carouselArticle .card.dim {
+    background-color: rgba(255, 255, 255, 0.9); /* 半透明白色背景 */
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 轻微的阴影效果 */
+}
+
+#carouselArticle .card-img-container {
+    position: relative;
+}
+
+
+/* 卡片覆盖层样式 */
+#carouselArticle .card-img-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    color: white;
+    background: rgba(0, 0, 0, 0.2); /* 半透明黑色背景 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    transition: background 0.3s ease;
+}
+
+#carouselArticle .card-title {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+#carouselArticle .card-text {
+    font-size: 1em;
+}
+
+#carouselArticle .card:hover .card-img-overlay {
+    background: rgba(0, 0, 0, 0.7); /* 鼠标悬停时加深背景色 */
+}
+
+/* 调整卡片间距 */
+#carouselArticle .col-3 {
+    margin: 0 20px;
+}
+
+

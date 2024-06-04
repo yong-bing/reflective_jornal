@@ -1,0 +1,59 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block nav %}
+    {% include 'blog/components/nav.html' %}
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-1 d-none d-md-block sidebar">
+            </div>
+            <div class="col-10 main-content">
+                <div class="index-head">
+                    <div class="container-fluid mt-1">
+                        <div class="row">
+                            <div class="category-block" id="category-block">
+                                {% for item in category_list %}
+                                    <div class="category-item">{{ item }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% include 'blog/components/collapse.html' %}
+                </div>
+                <div class="mt-2 p-4 p-md-5 mb-3 rounded text-body-emphasis bg-body-secondary">
+                    <div class="col-lg-6 px-0">
+                        <h1 class="display-5 fst-italic">{{ article_list.0.title }}</h1>
+                        <p class="lead my-3">{{ article_list.0.desc }}</p>
+                        <p class="lead mb-0"><a href="#" class="text-body-emphasis fw-bold">Continue reading...</a></p>
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    {% for article in article_list %}
+                        <div class="col-md-6">
+                            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                                <div class="col p-4 d-flex flex-column position-static">
+                                    <strong class="d-inline-block mb-2 text-primary-emphasis">{{ article.category }}</strong>
+                                    <h3 class="mb-0">{{ article.title }}</h3>
+                                    <div class="mb-1 text-body-secondary">{{ article.create_time }}</div>
+                                    <p class="card-text mb-auto">{{ article.desc }}</p>
+                                    <a href="#" class="icon-link gap-1 icon-link-hover stretched-link">
+                                        Continue reading
+                                    </a>
+                                </div>
+                                <div class="col-auto d-none d-lg-block">
+                                    <img src="/media/{{ article.user.avatar }}" alt="image" width="200px">
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-1 d-none d-md-block sidebar">
+            </div>
+        </div>
+    </div>
+{% endblock %}
