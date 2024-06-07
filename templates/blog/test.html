@@ -22,13 +22,21 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="col-1 d-none d-md-block sidebar">
+            </div>
+        </div>
 
-                <div class="card mb-3" >
-                    <div class="row g-1 align-items-center">
+        <div class="row mt-4 mb-4">
+            <div class="col-1 d-none d-md-block sidebar">
+            </div>
+            <div class="col-7 main-content">
+                <div class="card mb-3">
+                    <div class="g-1 row align-items-center">
                         <div class="col-2">
                             <img src="/media/{{ request.user.avatar }}" class="img-fluid " alt="...">
                         </div>
-                        <div class="col-8">
+                        <div class="col-10">
                             <div class="card-body">
                                 <h5 class="card-title">Card title</h5>
                                 <p class="card-text">This is a wider card with supporting text below as a natural
@@ -39,8 +47,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-1 d-none d-md-block sidebar">
-            </div>
+            <div class="col-3 d-none d-md-block sidebar">
+            <div class="col-1 d-none d-md-block sidebar"></div>
         </div>
     </div>
 {% endblock %}

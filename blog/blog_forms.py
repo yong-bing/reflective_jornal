@@ -1,6 +1,6 @@
 from django import forms
 
-from blog.models import UserInfo
+from blog.models import User
 
 
 class UserRegisterForm(forms.Form):
@@ -44,7 +44,7 @@ class UserRegisterForm(forms.Form):
     # 用户名不唯一错误提示, 重写clean_username方法
     def clean_username(self):
         username = self.cleaned_data.get('username')
-        user = UserInfo.objects.filter(username=username).first()
+        user = User.objects.filter(username=username).first()
         if user:
             raise forms.ValidationError('用户名已存在!')
         return username
