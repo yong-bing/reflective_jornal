@@ -4,7 +4,7 @@
 <div id="carouselArticle" class="carousel slide mt-3" data-bs-ride="carousel">
     <div class="carousel-inner">
         {% for row in data_list|batch:3 %}
-            <div class="carousel-item {% if forloop.first %}active{% endif %}" data-bs-interval="5000">
+            <div class="carousel-item  {% if forloop.first %}active{% endif %}" data-bs-interval="5000">
                 <div class="row justify-content-center align-items-center">
                     {% for item in row %}
                         <div class="col-3">
