@@ -74,53 +74,36 @@ def get_verification_code(request):
 
 # 个人站点主页
 def homepage(request, username):
-    user = models.User.objects.filter(username=username).first()
-    if not user:
-        return render(request, 'blog/404.html')
-    # all articles of the user
-    articles = user.articles.all()
-    # 所有文章的分类及其对应的文章数量
-    category_list = models.Category.objects.filter(article2category__article__user=user).annotate(
-        num=Count('article2category__article')).order_by('-num')
+    # 查询用户对应下的所有文章
+    articles = models.Article.objects.filter(user__username=username)
     context = {
-        'user': user,
-        'articles': articles,
-        'category_list': category_list,
-        'article_list': articles,
+        'username': username,
+        'articles': articles
     }
-
     return render(request, 'blog/homepage.html', context)
 
 
-# def test(request):
-#     author = {'name': 'alex', 'age': 18, 'bio': 'cool'}
-#     categories = [{'name': 'python'}, {'name': 'java'}, {'name': 'c++'}, {'name': 'php'}]
-#     post = [
-#         {'title': 'python', 'category': 'python', 'content': 'python is good', 'published_date': '2018-01-01'},
-#         {'title': 'java', 'category': 'java', 'content': 'java is good', 'published_date': '2018-01-02'},
-#         {'title': 'c++', 'category': 'c++', 'content': 'c++ is good', 'published_date': '2018-01-03'},
-#         {'title': 'php', 'category': 'php', 'content': 'php is good', 'published_date': '2018-01-04'},
-#     ]
-#     context = {
-#         'author': author,
-#         'categories': categories,
-#         'page_obj': post
-#     }
-#     return render(request, 'blog/test.html', context)
+def article_detail(request, username, article_id):
+    article = models.Article.objects.filter(user__username=username, nid=article_id).first()
+    context = {
+        'username': username,
+        'article_detail': article
+    }
+    return render(request, 'blog/article.html', context)
 
 
 def test(request):
-
-    some_markdown_text ="""
-# This is a heading
-
-This is some **bold** text and some *italic* text.
-
-- Item 1
-- Item 2
-- Item 3
-"""
+    author = {'name': 'alex', 'age': 18, 'bio': 'cool'}
+    categories = [{'name': 'python'}, {'name': 'java'}, {'name': 'c++'}, {'name': 'php'}]
+    post = [
+        {'title': 'python', 'category': 'python', 'content': 'python is good', 'published_date': '2018-01-01'},
+        {'title': 'java', 'category': 'java', 'content': 'java is good', 'published_date': '2018-01-02'},
+        {'title': 'c++', 'category': 'c++', 'content': 'c++ is good', 'published_date': '2018-01-03'},
+        {'title': 'php', 'category': 'php', 'content': 'php is good', 'published_date': '2018-01-04'},
+    ]
     context = {
-        'some_markdown_text': some_markdown_text
+        'author': author,
+        'categories': categories,
+        'page_obj': post
     }
     return render(request, 'blog/test.html', context)

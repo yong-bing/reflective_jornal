@@ -1,0 +1,19 @@
+<div class="sticky-top pt-3">
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">作者信息</h5>
+            <p class="card-text"><strong>作者昵称:</strong> {{ user.username }}</p>
+            <p class="card-text"><strong>作者简介:</strong> {{ user.desc }}</p>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">文章分类</h5>
+            <ul class="list-group list-group-flush">
+                {% for category in category_list %}
+                    <p class="card-text">{{ category.content }}({{ category.num }})</p>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>

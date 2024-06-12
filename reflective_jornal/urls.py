@@ -29,7 +29,10 @@ urlpatterns = [
     path('register/', views.register),
     path('logout/', views.logout),
     path('test', views.test),
-    path('<str:username>/', views.homepage),
+    re_path(r'^(?P<username>\w+)/$', views.homepage),
+
+    # article detail
+    re_path(r'^(?P<username>\w+)/articles/(?P<article_id>\d+)/$', views.article_detail),
 
     # media url
     re_path(r'media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
