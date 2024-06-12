@@ -15,30 +15,8 @@
     transform: translateX(-50%);
 }
 
-.navbar-toggler.no-border {
-    border: none;
-}
-
-
-.btn.btn-outline-success.search {
-    margin-right: 10px;
-    border: none;
-}
-
-#offcanvasNavbarLight {
+#NavbarRight, #NavbarLeft {
     width: 320px;
-    border-bottom-left-radius: 15px;
-    border-top-left-radius: 15px;
-}
-
-#offcanvasNavbarLightLeft {
-    width: 320px;
-    border-bottom-right-radius: 15px;
-    border-top-right-radius: 15px;
-}
-
-.web-title {
-    border-left: 25px;
 }
 
 @media (max-width: 767px) {
@@ -53,10 +31,6 @@
     .col-3 {
         margin: 0 5px;
     }
-}
-
-.user-avatar {
-    margin-right: 10px; /* 设置头像右侧的间距 */
 }
 
 .user-info {
@@ -154,3 +128,12 @@
 }
 
 
+.create-time {
+    position: absolute;
+    bottom: 0;
+    right: 20px;
+}
+.article-info {
+    position: absolute;
+    bottom: -15px;
+}

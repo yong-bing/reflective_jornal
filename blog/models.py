@@ -9,6 +9,8 @@ class User(AbstractUser):
     nid = models.AutoField(primary_key=True)
     avatar = models.FileField(upload_to='avatars/', default='avatars/default.jpg')
     create_time = models.DateTimeField(auto_now_add=True)
+    desc = models.CharField(max_length=255, null=True)
+    signature = models.CharField(max_length=255, null=True)
 
     homepage = models.OneToOneField(to='Homepage', to_field='nid', null=True, on_delete=models.CASCADE)
 

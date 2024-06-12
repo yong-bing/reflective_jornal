@@ -29,6 +29,7 @@ urlpatterns = [
     path('register/', views.register),
     path('logout/', views.logout),
     path('test', views.test),
+    path('<str:username>/', views.homepage),
 
     # media url
     re_path(r'media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),

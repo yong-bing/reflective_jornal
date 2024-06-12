@@ -1,54 +1,10 @@
 {% extends 'blog/base.html' %}
 {% load static %}
-
-{% block nav %}
-    {% include 'blog/components/nav.html' %}
-{% endblock %}
+{% load markdown_extras %}
 
 {% block content %}
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-1 d-none d-md-block sidebar">
-            </div>
-            <div class="col-10 main-content">
-                <div class="index-head">
-                    <div class="container-fluid mt-1">
-                        <div class="row">
-                            <div class="category-block" id="category-block">
-                                {% for item in category_list %}
-                                    <div class="category-item">{{ item }}</div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-1 d-none d-md-block sidebar">
-            </div>
-        </div>
-
-        <div class="row mt-4 mb-4">
-            <div class="col-1 d-none d-md-block sidebar">
-            </div>
-            <div class="col-7 main-content">
-                <div class="card mb-3">
-                    <div class="g-1 row align-items-center">
-                        <div class="col-2">
-                            <img src="/media/{{ request.user.avatar }}" class="img-fluid " alt="...">
-                        </div>
-                        <div class="col-10">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">This is a wider card with supporting text below as a natural
-                                    lead-in to additional content. This content is a little bit longer.</p>
-                                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-3 d-none d-md-block sidebar">
-            <div class="col-1 d-none d-md-block sidebar"></div>
-        </div>
+   <h1>Markdown Rendering Example</h1>
+    <div>
+        {{ some_markdown_text | markdown }}
     </div>
 {% endblock %}

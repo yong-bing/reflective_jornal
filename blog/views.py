@@ -1,4 +1,5 @@
 from django.contrib import auth
+from django.db.models import Count
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 
@@ -35,18 +36,11 @@ def logout(request):
 
 
 def index(request):
-    data_list = [
-        {'title': 'Card 1', 'text': 'This is the first card.'},
-        {'title': 'Card 2', 'text': 'This is the second card.'},
-        {'title': 'Card 3', 'text': 'This is the third card.'},
-        {'title': 'Card 4', 'text': 'This is the fourth card.'},
-
-    ]
     article_list = models.Article.objects.all()
-    # category_list = models.Category.objects.all()
-    category_list = ["测试1", "测试2", "测试3", "测试4", "测试5", "测试6", "测试7", "测试8", "测试9", "测试10",] * 2
+    category_list = models.Category.objects.all()
+
     return render(request, 'blog/index.html',
-                  {'article_list': article_list, 'category_list': category_list, 'data_list': data_list})
+                  {'article_list': article_list, 'category_list': category_list, 'data_list': []})
 
 
 def register(request):
@@ -64,7 +58,7 @@ def register(request):
             if avatar is None:
                 avatar = 'avatars/default.png'
 
-            models.UserInfo.objects.create_user(username=username, password=password, email=email, avatar=avatar)
+            models.User.objects.create_user(username=username, password=password, email=email, avatar=avatar)
 
         else:
             response['msg'] = user_form.errors
@@ -79,17 +73,54 @@ def get_verification_code(request):
 
 
 # 个人站点主页
-def home_site(request, username):
-    user = models.UserInfo.objects.filter(username=username).first()
+def homepage(request, username):
+    user = models.User.objects.filter(username=username).first()
     if not user:
         return render(request, 'blog/404.html')
-    return render(request, 'blog/404.html', {'user': user})
+    # all articles of the user
+    articles = user.articles.all()
+    # 所有文章的分类及其对应的文章数量
+    category_list = models.Category.objects.filter(article2category__article__user=user).annotate(
+        num=Count('article2category__article')).order_by('-num')
+    context = {
+        'user': user,
+        'articles': articles,
+        'category_list': category_list,
+        'article_list': articles,
+    }
+
+    return render(request, 'blog/homepage.html', context)
+
+
+# def test(request):
+#     author = {'name': 'alex', 'age': 18, 'bio': 'cool'}
+#     categories = [{'name': 'python'}, {'name': 'java'}, {'name': 'c++'}, {'name': 'php'}]
+#     post = [
+#         {'title': 'python', 'category': 'python', 'content': 'python is good', 'published_date': '2018-01-01'},
+#         {'title': 'java', 'category': 'java', 'content': 'java is good', 'published_date': '2018-01-02'},
+#         {'title': 'c++', 'category': 'c++', 'content': 'c++ is good', 'published_date': '2018-01-03'},
+#         {'title': 'php', 'category': 'php', 'content': 'php is good', 'published_date': '2018-01-04'},
+#     ]
+#     context = {
+#         'author': author,
+#         'categories': categories,
+#         'page_obj': post
+#     }
+#     return render(request, 'blog/test.html', context)
 
 
 def test(request):
-    data_list = [
-        {'title': 'Card 1', 'text': 'This is the first card.'},
-        {'title': 'Card 2', 'text': 'This is the second card.'},
-        {'title': 'Card 3', 'text': 'This is the third card.'}
-    ]
-    return render(request, 'blog/test.html', {'data_list': data_list})
+
+    some_markdown_text ="""
+# This is a heading
+
+This is some **bold** text and some *italic* text.
+
+- Item 1
+- Item 2
+- Item 3
+"""
+    context = {
+        'some_markdown_text': some_markdown_text
+    }
+    return render(request, 'blog/test.html', context)

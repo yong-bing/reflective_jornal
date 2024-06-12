@@ -1,88 +1,87 @@
-<nav class="navbar bg-body-tertiary" aria-label="Light offcanvas navbar">
-    <div class="container-fluid">
-        <div>
-            {% if request.user.is_authenticated %}
-                <button class="navbar-toggler no-border" type="button" data-bs-toggle="offcanvas"
-                        data-bs-target="#offcanvasNavbarLightLeft"
-                        aria-controls="offcanvasNavbarLightLeft" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="offcanvas offcanvas-start d-flex" tabindex="-1" id="offcanvasNavbarLightLeft"
-                     aria-labelledby="offcanvasNavbarLightLeftLabel">
-                    <div class="offcanvas-header">
-                        <h4 class="offcanvas-title" id="offcanvasNavbarLightLeftLabel">{{ request.user.username }}</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
-                                aria-label="Close"></button>
-                    </div>
-                    <div class="offcanvas-body">
-                        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                            <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="#">个人资料</a>
-                            </li>
-                            <li>
-                                <hr>
-                            </li>
-                        </ul>
-                    </div>
+<div class="navbar bg-body-tertiary container-fluid" aria-label="Light offcanvas navbar">
+    <div class="nav-left d-flex align-items-center">
+        {% if request.user.is_authenticated %}
+            <!-- Navbar Left Toggle Button -->
+            <button class="navbar-toggler border-0 ms-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#NavbarLeft"
+                    aria-controls="NavbarLeft" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- Offcanvas Navbar Left -->
+            <div class="offcanvas offcanvas-start d-flex rounded-end-4" tabindex="-1" id="NavbarLeft"
+                 data-bs-backdrop="false" aria-labelledby="NavbarLeftLabel">
+                <div class="offcanvas-header">
+                    <h4 class="offcanvas-title" id="NavbarLeftLabel">{{ request.user.username }}</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
-            {% else %}
-            {% endif %}
-            <a class="navbar-brand web-title" href="#">映心漫记</a>
-        </div>
-        <div class="d-flex">
-            <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success  search" type="submit">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                         class="bi bi-search" viewBox="0 0 16 16">
-                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-                    </svg>
-                </button>
-            </form>
-            {% if request.user.is_authenticated %}
-                <button class="navbar-toggler no-border" type="button" data-bs-toggle="offcanvas"
-                        data-bs-target="#offcanvasNavbarLightRight"
-                        aria-controls="offcanvasNavbarLightRight" aria-label="Toggle navigation">
-                    <img src="/media/{{ request.user.avatar }}" alt="{{ user.username }}" width="32" height="32"
-                         class="rounded-circle">
-                </button>
-                <div class="offcanvas offcanvas-end d-flex" tabindex="-1" id="offcanvasNavbarLightRight"
-                     aria-labelledby="offcanvasNavbarLightRightLabel">
-                    <div class="offcanvas-header">
-                        <span class="user-avatar"> 
-                            <img src="/media/{{ request.user.avatar }}" alt="{{ request.user.username }}" width="36"
-                                 height="36"
-                                 class="rounded-circle"> 
-                        </span>
-                        <div class="user-info">
-                            <h4 class="offcanvas-title"
-                                id="offcanvasNavbarLightRightLabel">{{ request.user.username }}</h4>
-                            <p class="user-email">{{ request.user.email }}</p>
-                        </div>
-                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
-                                aria-label="Close"></button>
-                    </div>
-
-                    <div class="offcanvas-body">
-                        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                            <li class="nav-item">
-                                <a class="nav-link" aria-current="page" href="#">个人资料</a>
-                            </li>
-                            <li>
-                                <hr>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/logout/">注销登录</a>
-                            </li>
-                        </ul>
-                    </div>
+                <div class="offcanvas-body">
+                    <ul class="navbar-nav flex-grow-1 pe-3">
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="#">个人资料</a>
+                        </li>
+                        <li class="nav-item">
+                            <hr>
+                        </li>
+                    </ul>
                 </div>
-            {% else %}
-                <div>
-                    <a href="/login/" class="btn btn-outline-success">登录</a>
-                    <a href="/register/" class="btn btn-outline-primary">注册</a>
-                </div>
-            {% endif %}
-        </div>
+            </div>
+        {% endif %}
+        <a class="navbar-brand ms-3" href="#">映心漫记</a>
     </div>
-</nav>
+
+    <div class="d-flex align-items-center">
+        <!-- Search Form -->
+        <form class="d-flex mx-3" role="search">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success search border-0" type="submit">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                     class="bi bi-search" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                </svg>
+            </button>
+        </form>
+
+        {% if request.user.is_authenticated %}
+            <!-- Navbar Right Toggle Button -->
+            <button class="navbar-toggler border-0 me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#NavbarRight"
+                    aria-controls="NavbarRight" aria-label="Toggle navigation">
+                <img src="/media/{{ request.user.avatar }}" alt="{{ request.user.username }}" width="32" height="32"
+                     class="rounded-circle">
+            </button>
+            <!-- Offcanvas Navbar Right -->
+            <div class="offcanvas offcanvas-end d-flex rounded-start-4" tabindex="-1" id="NavbarRight"
+                 data-bs-backdrop="false" aria-labelledby="NavbarRightLabel">
+                <div class="offcanvas-header">
+                    <img src="/media/{{ request.user.avatar }}" alt="{{ request.user.username }}" width="36" height="36"
+                         class="rounded-circle me-3">
+                    <div class="user-info">
+                        <h4 class="offcanvas-title" id="NavbarRightLabel">{{ request.user.username }}</h4>
+                        <p class="user-email">{{ request.user.email }}</p>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <ul class="navbar-nav flex-grow-1 pe-3">
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="#">个人资料</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">我的主页</a>
+                        </li>
+                        <li class="nav-item">
+                            <hr>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/logout/">注销登录</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        {% else %}
+            <!-- Login and Register Buttons -->
+            <div class="mx-3">
+                <a href="/login/" class="btn btn-outline-success me-2">登录</a>
+                <a href="/register/" class="btn btn-outline-primary">注册</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
