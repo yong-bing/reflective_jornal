@@ -1,10 +1,138 @@
-{% extends 'blog/base.html' %}
-{% load static %}
-{% load markdown_extras %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人网页</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        header {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        nav {
+            margin: 20px 0;
+            text-align: center;
+        }
+        nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #007bff;
+        }
+        section {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .content {
+            margin-bottom: 40px;
+        }
+        .content h2 {
+            font-size: 2em;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .content p, .content ul {
+            line-height: 1.6;
+        }
+        .projects, .blog {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .project, .post {
+            flex: 1 1 calc(50% - 20px);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            background-color: #fff;
+        }
+        footer {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+        }
+        @media (max-width: 600px) {
+            .project, .post {
+                flex: 1 1 100%;
+            }
+        }
+    </style>
+</head>
+<body>
 
-{% block content %}
-   <h1>Markdown Rendering Example</h1>
-    <div>
-        {{ some_markdown_text | markdown }}
-    </div>
-{% endblock %}
+    <header>
+        <h1>个人网页</h1>
+    </header>
+    
+    <nav>
+        <a href="#about">个人简介</a>
+        <a href="#experience">工作经历</a>
+        <a href="#projects">项目展示</a>
+        <a href="#blog">博客</a>
+    </nav>
+    
+    <section id="about" class="content">
+        <h2>个人简介</h2>
+        <p>这里是个人简介的内容。</p>
+    </section>
+    
+    <section id="experience" class="content">
+        <h2>工作经历</h2>
+        <ul>
+            <li><strong>公司 A</strong> - 职位 (年份 - 年份)
+                <p>工作描述内容。</p>
+            </li>
+            <li><strong>公司 B</strong> - 职位 (年份 - 年份)
+                <p>工作描述内容。</p>
+            </li>
+            <!-- 添加更多工作经历 -->
+        </ul>
+    </section>
+    
+    <section id="projects" class="content">
+        <h2>项目展示</h2>
+        <div class="projects">
+            <div class="project">
+                <h3>项目 A</h3>
+                <p>项目描述内容。</p>
+            </div>
+            <div class="project">
+                <h3>项目 B</h3>
+                <p>项目描述内容。</p>
+            </div>
+            <!-- 添加更多项目 -->
+        </div>
+    </section>
+    
+    <section id="blog" class="content">
+        <h2>博客</h2>
+        <div class="blog">
+            <div class="post">
+                <h3>博客文章 A</h3>
+                <p>博客文章内容。</p>
+            </div>
+            <div class="post">
+                <h3>博客文章 B</h3>
+                <p>博客文章内容。</p>
+            </div>
+            <!-- 添加更多博客文章 -->
+        </div>
+    </section>
+    
+    <footer>
+        <p>© 2024 你的名字. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>

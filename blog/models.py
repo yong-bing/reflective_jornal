@@ -53,7 +53,7 @@ class Article(models.Model):
     desc = models.CharField(max_length=255, verbose_name='article desc')
     cover = models.FileField(upload_to='covers/', default='covers/default.jpg')
     content = models.TextField()
-    create_time = models.DateTimeField(auto_now_add=True)
+    created_time = models.DateTimeField(auto_now_add=True)
     comment_count = models.IntegerField(default=0)
     like_count = models.IntegerField(default=0)
     user = models.ForeignKey(to='User', to_field='nid', on_delete=models.CASCADE, related_name='articles')

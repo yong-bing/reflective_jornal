@@ -1,0 +1,54 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block nav %}
+    {% include 'blog/components/nav.html' %}
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <!-- 左侧栏 -->
+            <div class="col-md-3 bg-light">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">博客后台</h5>
+                        <ul class="list-group list-group-flush">
+                            <li>新建文章</li>
+                            <li>导入文章</li>
+                            <li>草稿箱</li>
+                            <li>博客搬家</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧栏 -->
+            <div class="col-md-9 pt-3">
+                <h3 class="mb-4">我的文章</h3>
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <thead>
+                        <tr>
+                            <td>文章标题</td>
+                            <td>发布时间</td>
+                            <td>操作</td>
+                            <td>操作</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for article in articles %}
+                        <tr>
+                            <td>{{ article.title }}</td>
+                            <td>{{ article.created_time }}</td>
+                            <td>编辑</td>
+                            <td>删除</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,82 @@
+/* Custom CSS */
+.blog-post {
+    margin: 2rem;
+}
+
+.blog-post h1, .blog-post h2, .blog-post h3, .blog-post h4, .blog-post h5, .blog-post h6 {
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.blog-post p {
+    margin-bottom: 1.25rem;
+}
+
+.blog-post a {
+    color: #0d6efd;
+    text-decoration: underline;
+}
+
+.blog-post a:hover {
+    color: #0a58ca;
+}
+
+.blog-post img {
+    max-width: 70%;
+    height: auto;
+    margin: 1rem auto;
+    display: block;
+
+}
+
+.blog-post blockquote {
+    padding: 1rem 1.25rem;
+    margin: 1.5rem 0;
+    border-left: 0.25rem solid #dfe2e5;
+    background-color: #f8f9fa;
+}
+
+.blog-post code {
+    background-color: #f8f9fa;
+    padding: 0.2rem 0.4rem;
+    font-size: 85%;
+    border-radius: 0.25rem;
+}
+
+.blog-post pre code {
+    background-color: #343a40;
+    color: #f8f9fa;
+    padding: 1rem;
+    display: block;
+    overflow-x: auto;
+}
+
+
+.toc {
+    /*margin: 2rem 0;*/
+    /*padding: 1rem;*/
+    background-color: #f8f9fa;
+    border: 1px solid #dfe2e5;
+    border-radius: 0.25rem;
+}
+
+.toc h2 {
+    margin-top: 0;
+}
+
+.toc ul {
+    list-style: none;
+    /*padding-left: 0;*/
+}
+
+.toc ul li {
+    margin-bottom: 0.5rem;
+}
+
+.toc ul li a {
+    text-decoration: none;
+}
+
+.toc ul li a:hover {
+    text-decoration: underline;
+}

@@ -1,12 +1,13 @@
 {% extends 'blog/base.html' %}
 {% load static %}
-{% load markdown_extras %}
 {% load blog_tags %}
 
+{% block nav %}
+    {% include 'blog/components/nav.html' %}
+{% endblock %}
 
 {% block content %}
     <div class="container-fluid">
-        {% include 'blog/components/nav.html' %}
         <div class="row">
             <!-- 左侧栏 -->
             <div class="col-md-3 bg-light">
@@ -16,7 +17,7 @@
             <!-- 右侧栏 -->
             <div class="col-md-9 pt-3">
                 {% for article in articles %}
-                    <a href="#" class="list-group-item list-group-item-action">
+                    <a href="/{{ article.user }}/articles/{{ article.nid }}" class="list-group-item list-group-item-action">
                         <div class="card mb-3">
                             <div class="row g-0">
                                 <div class="col-md-2">
@@ -46,7 +47,7 @@
                                             </small>
                                         </p>
                                         <p class="card-text create-time">
-                                            <small class="text-muted">{{ article.create_time }} </small>
+                                            <small class="text-muted">{{ article.created_time }} </small>
                                         </p>
                                     </div>
                                 </div>

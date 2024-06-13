@@ -25,7 +25,7 @@
                     <div class="col-lg-6 px-0">
                         <h1 class="display-5 fst-italic">{{ article_list.0.title }}</h1>
                         <p class="lead my-3">{{ article_list.0.desc }}</p>
-                        <p class="lead mb-0"><a href="#" class="text-body-emphasis fw-bold">Continue reading...</a></p>
+                        <p class="lead mb-0"><a href="/{{ article_list.0.user }}/articles/{{ article_list.0.nid }}" class="text-body-emphasis fw-bold">Continue reading...</a></p>
                     </div>
                 </div>
 
@@ -39,7 +39,7 @@
                                         <h3 class="mb-0">{{ article.title }}</h3>
                                         <div class="mb-1 text-body-secondary">{{ article.create_time }}</div>
                                         <p class="card-text mb-auto">{{ article.desc }}</p>
-                                        <a href="#" class="icon-link gap-1 icon-link-hover stretched-link">Continue
+                                        <a href="/{{ article.user }}/articles/{{ article.nid }}" class="icon-link gap-1 icon-link-hover stretched-link">Continue
                                             reading</a>
                                     </div>
                                     <div class="col-auto d-none d-lg-block">
@@ -51,21 +51,21 @@
                     {% endfor %}
                 </div>
 
-                <div class="card mb-3">
-                    <div class="row g-1 align-items-center">
-                        <div class="col-2">
-                            <img src="/media/{{ request.user.avatar }}" class="img-fluid" alt="...">
-                        </div>
-                        <div class="col-8">
-                            <div class="card-body">
-                                <h5 class="card-title">Card title</h5>
-                                <p class="card-text">This is a wider card with supporting text below as a natural
-                                    lead-in to additional content. This content is a little bit longer.</p>
-                                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+{#                <div class="card mb-3">#}
+{#                    <div class="row g-1 align-items-center">#}
+{#                        <div class="col-2">#}
+{#                            <img src="/media/{{ request.user.avatar }}" class="img-fluid" alt="...">#}
+{#                        </div>#}
+{#                        <div class="col-8">#}
+{#                            <div class="card-body">#}
+{#                                <h5 class="card-title">Card title</h5>#}
+{#                                <p class="card-text">This is a wider card with supporting text below as a natural#}
+{#                                    lead-in to additional content. This content is a little bit longer.</p>#}
+{#                                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
             </div>
             <div class="col-1 d-none d-md-block sidebar"></div>
         </div>

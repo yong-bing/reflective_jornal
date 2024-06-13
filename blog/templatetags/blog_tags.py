@@ -1,5 +1,7 @@
+import markdown2
 from django import template
 from django.db.models import Count
+from django.utils.safestring import mark_safe
 
 from blog import models
 
@@ -28,3 +30,13 @@ def sidebar_personal(username):
     }
 
     return context
+
+
+@register.simple_tag(name='render_markdown')
+def render_markdown(text):
+    extras = ['toc', 'fenced-code-blocks']
+    markdown_html = markdown2.markdown(text, extras=extras)
+    return {
+        'toc': mark_safe(markdown_html.toc_html),
+        'content': mark_safe(markdown_html),
+    }

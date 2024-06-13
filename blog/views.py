@@ -1,5 +1,5 @@
 from django.contrib import auth
-from django.db.models import Count
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 
@@ -7,8 +7,8 @@ from blog import models
 from blog.blog_forms import UserRegisterForm
 from blog.utils import verification_code
 
-
 # Create your views here.
+
 
 def login(request):
     if request.method == 'POST':
@@ -83,13 +83,13 @@ def homepage(request, username):
     return render(request, 'blog/homepage.html', context)
 
 
-def article_detail(request, username, article_id):
+def blog_post(request, username, article_id):
     article = models.Article.objects.filter(user__username=username, nid=article_id).first()
     context = {
         'username': username,
-        'article_detail': article
+        'article': article
     }
-    return render(request, 'blog/article.html', context)
+    return render(request, 'blog/blog_post.html', context)
 
 
 def test(request):
@@ -107,3 +107,37 @@ def test(request):
         'page_obj': post
     }
     return render(request, 'blog/test.html', context)
+
+
+@login_required
+def dashboard(request):
+    # 查询当前登录用户的所有文章
+    articles = models.Article.objects.filter(user=request.user)
+    context = {
+        'articles': articles
+    }
+    return render(request, 'blog/dashboard.html', context)
+
+
+# @login_required
+# def edit(request):
+#     if request.method == 'POST':
+#         title = request.POST.get('title')
+#         desc = request.POST.get('desc')
+#         content = request.POST.get('content')
+#         category_id = request.POST.get('category_id')
+#         tag_id = request.POST.get('tag_id')
+#         cover = request.FILES.get('cover')
+#
+#         article = models.Article.objects.create(title=title, desc=desc, content=content, user=request.user, cover=cover)
+#         article2tag = models.Article2Tag.objects.create(article=article, tag_id=tag_id)
+#         article2tag.save()
+#         return redirect(dashboard)
+#
+#     categories = models.Category.objects.all()
+#     tags = models.Tag.objects.all()
+#     context = {
+#         'categories': categories,
+#         'tags': tags
+#     }
+#     return render(request, 'blog/edit.html', context)
