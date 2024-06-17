@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="stylesheet" href="{% static 'blog/css/bootstrap.min.css' %}">
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row mt-3">
+        <form method="post" class="w-100">
+            {% csrf_token %}
+            {{ form.media }}
+            <div class="row mb-3">
+                <div class="col">
+                    {{ form.title }}
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">发布</button>
+                </div>
+            </div>
+            <div class="mb-3">
+                {{ form.content }}
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

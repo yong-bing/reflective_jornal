@@ -1,6 +1,6 @@
 from django import forms
 
-from blog.models import User
+from blog.models import User, Article
 
 
 class UserRegisterForm(forms.Form):
@@ -56,3 +56,23 @@ class UserRegisterForm(forms.Form):
         if password and confirm_password and password != confirm_password:
             raise forms.ValidationError('两次密码不一致!')
         return self.cleaned_data
+
+
+class ArticleCreateForm(forms.ModelForm):
+    class Meta:
+        model = Article
+        fields = ['title', 'content']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control article-title', 'placeholder': '请输入文章标题'}),
+            'content': forms.Textarea(attrs={'class': 'mdeditor'}),
+        }
+
+
+class ArticlePublishForm(forms.ModelForm):
+    class Meta:
+        model = Article
+        fields = ['desc', 'cover']
+        widgets = {
+            'desc': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '请输入文章描述'}),
+            'cover': forms.FileInput(attrs={'class': 'form-control'}),
+        }

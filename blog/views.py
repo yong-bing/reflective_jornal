@@ -2,10 +2,12 @@ from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
 
 from blog import models
-from blog.blog_forms import UserRegisterForm
+from blog.blog_forms import UserRegisterForm, ArticleCreateForm, ArticlePublishForm
 from blog.utils import verification_code
+
 
 # Create your views here.
 
@@ -92,23 +94,6 @@ def blog_post(request, username, article_id):
     return render(request, 'blog/blog_post.html', context)
 
 
-def test(request):
-    author = {'name': 'alex', 'age': 18, 'bio': 'cool'}
-    categories = [{'name': 'python'}, {'name': 'java'}, {'name': 'c++'}, {'name': 'php'}]
-    post = [
-        {'title': 'python', 'category': 'python', 'content': 'python is good', 'published_date': '2018-01-01'},
-        {'title': 'java', 'category': 'java', 'content': 'java is good', 'published_date': '2018-01-02'},
-        {'title': 'c++', 'category': 'c++', 'content': 'c++ is good', 'published_date': '2018-01-03'},
-        {'title': 'php', 'category': 'php', 'content': 'php is good', 'published_date': '2018-01-04'},
-    ]
-    context = {
-        'author': author,
-        'categories': categories,
-        'page_obj': post
-    }
-    return render(request, 'blog/test.html', context)
-
-
 @login_required
 def dashboard(request):
     # 查询当前登录用户的所有文章
@@ -119,25 +104,34 @@ def dashboard(request):
     return render(request, 'blog/dashboard.html', context)
 
 
-# @login_required
-# def edit(request):
-#     if request.method == 'POST':
-#         title = request.POST.get('title')
-#         desc = request.POST.get('desc')
-#         content = request.POST.get('content')
-#         category_id = request.POST.get('category_id')
-#         tag_id = request.POST.get('tag_id')
-#         cover = request.FILES.get('cover')
-#
-#         article = models.Article.objects.create(title=title, desc=desc, content=content, user=request.user, cover=cover)
-#         article2tag = models.Article2Tag.objects.create(article=article, tag_id=tag_id)
-#         article2tag.save()
-#         return redirect(dashboard)
-#
-#     categories = models.Category.objects.all()
-#     tags = models.Tag.objects.all()
-#     context = {
-#         'categories': categories,
-#         'tags': tags
-#     }
-#     return render(request, 'blog/edit.html', context)
+@login_required
+def edit(request):
+    if request.method == 'POST':
+        form = ArticleCreateForm(request.POST, request.FILES)
+        if form.is_valid():
+            article = form.save(commit=False)
+            article.user = request.user
+            article.save()
+            return redirect(dashboard)
+
+    else:
+        form = ArticleCreateForm()
+    return render(request, 'blog/edit.html', {'form': form})
+
+
+@csrf_exempt
+def test(request):
+    if request.method == 'POST':
+        form = ArticleCreateForm()
+        if form.is_valid():
+            article = form.save(commit=False)
+            article.user = request.user
+            article.save()
+            return redirect(dashboard)
+
+        # 创建或更新文章逻辑
+        article = models.Article.objects.create(title=title, content=content, desc=desc, cover=cover, state=1)
+
+        return JsonResponse({'status': 'success', 'message': '文章发布成功'})
+    else:
+        return render(request, 'blog/test.html')

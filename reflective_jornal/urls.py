@@ -21,25 +21,33 @@ from blog import views
 from reflective_jornal import settings
 
 urlpatterns = [
+    # Admin and login/logout paths
     path('admin/', admin.site.urls),
-    path('login/', views.login),
-    path('get_verification_code/', views.get_verification_code),
-    path('index/', views.index),
-    re_path('^$', views.index),
-    path('register/', views.register),
-    path('logout/', views.logout),
-    path('test', views.test),
+    path('login/', views.login, name='login'),
+    path('logout/', views.logout, name='logout'),
 
-    # 用户后台管理
-    re_path(r'dashboard/$', views.dashboard),
-    re_path(r'dashboard/edit/$', views.edit),
+    # Index and registration
+    path('index/', views.index, name='index'),
+    path('register/', views.register, name='register'),
+    re_path(r'^$', views.index),
 
-    re_path(r'^(?P<username>\w+)/$', views.homepage),
+    # verification code
+    path('get_verification_code/', views.get_verification_code, name='get_verification_code'),
 
-    # article detail
-    re_path(r'^(?P<username>\w+)/articles/(?P<article_id>\d+)/$', views.blog_post),
+    # MDEditor
+    path('mdeditor/', include('mdeditor.urls')),
 
-    # media url
-    re_path(r'media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+    # Test path
+    path('test/', views.test, name='test'),
 
+    # User dashboard management
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('dashboard/edit/', views.edit, name='edit_dashboard'),
+
+    # User homepage and articles
+    re_path(r'^(?P<username>\w+)/$', views.homepage, name='homepage'),
+    re_path(r'^(?P<username>\w+)/articles/(?P<article_id>\d+)/$', views.blog_post, name='blog_post'),
+
+    # Media URL
+    re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]

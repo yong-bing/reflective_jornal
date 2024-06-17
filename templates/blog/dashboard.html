@@ -31,19 +31,22 @@
                         <thead>
                         <tr>
                             <td>文章标题</td>
-                            <td>发布时间</td>
+                            <td>创建时间</td>
+                            <td>状态</td>
                             <td>操作</td>
                             <td>操作</td>
+
                         </tr>
                         </thead>
                         <tbody>
                         {% for article in articles %}
-                        <tr>
-                            <td>{{ article.title }}</td>
-                            <td>{{ article.created_time }}</td>
-                            <td>编辑</td>
-                            <td>删除</td>
-                        </tr>
+                            <tr>
+                                <td>{{ article.title }}</td>
+                                <td>{{ article.created_time }}</td>
+                                <td>{{ article.state|yesno:"已发布, 草稿"}}</td>
+                                <td>编辑</td>
+                                <td>删除</td>
+                            </tr>
                         {% endfor %}
                         </tbody>
                     </table>

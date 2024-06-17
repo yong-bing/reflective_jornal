@@ -131,4 +131,20 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = '/login/'
 
+MDEDITOR_CONFIGS = {
+    'default': {
+        'width': '100%',  # Custom edit box width
+        'height': 860,  # Custom edit box height
+        'image_floder': 'editor',  # The image folder in the media root directory
+        'search_replace': True,  # Whether to open the search and replace function
+        'emoji': True,  # Whether to open the expression function
+        'tex': True,  # Whether to open the tex chart function
+        'flow_chart': True,  # Whether to open the flow chart function
+        'sequence': True,  # Whether to open the sequence diagram function
+        'placeholder': 'Enjoy Markdown! coding now...',  # Edit box placeholder
+        'toc': True,
+        'lineWrapping': True,  # Whether to open the line wrapping
+    }
+}
 
+X_FRAME_OPTIONS = 'SAMEORIGIN'
