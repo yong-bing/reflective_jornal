@@ -107,31 +107,34 @@ def dashboard(request):
 @login_required
 def edit(request):
     if request.method == 'POST':
-        form = ArticleCreateForm(request.POST, request.FILES)
-        if form.is_valid():
-            article = form.save(commit=False)
+        create_form = ArticleCreateForm(request.POST)
+        if create_form.is_valid():
+            article = create_form.save(commit=False)
             article.user = request.user
+            article.state = 0
             article.save()
-            return redirect(dashboard)
-
+            if 'save_draft' in request.POST:
+                return JsonResponse({'status': 'success', 'message': '已保存为草稿!'})
+            elif 'publish' in request.POST:
+                return JsonResponse({'nid': article.nid})
+        else:
+            return JsonResponse({'errors': create_form.errors}, status=400)
     else:
-        form = ArticleCreateForm()
-    return render(request, 'blog/edit.html', {'form': form})
+        create_form = ArticleCreateForm()
+    return render(request, 'blog/edit.html', {'create_form': create_form})
 
 
-@csrf_exempt
-def test(request):
+@login_required
+def publish_article(request, nid):
     if request.method == 'POST':
-        form = ArticleCreateForm()
-        if form.is_valid():
-            article = form.save(commit=False)
-            article.user = request.user
-            article.save()
-            return redirect(dashboard)
-
-        # 创建或更新文章逻辑
-        article = models.Article.objects.create(title=title, content=content, desc=desc, cover=cover, state=1)
-
+        article = models.Article.objects.filter(nid=nid).first()
+        article.description = request.POST.get('description')
+        article.state = 1  # 1 表示已发布
+        article.save()
+        # return JsonResponse({'redirect': True, 'url': 'dashboard'})
         return JsonResponse({'status': 'success', 'message': '文章发布成功'})
-    else:
-        return render(request, 'blog/test.html')
+    return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
+def test(request):
+    return JsonResponse({'status': 'success'})

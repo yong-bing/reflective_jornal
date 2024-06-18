@@ -40,9 +40,10 @@ urlpatterns = [
     # Test path
     path('test/', views.test, name='test'),
 
-    # User dashboard management
+    # User dashboard management and article management
     path('dashboard/', views.dashboard, name='dashboard'),
-    path('dashboard/edit/', views.edit, name='edit_dashboard'),
+    path('dashboard/edit/', views.edit, name='edit_article'),
+    path('dashboard/publish/<int:nid>/', views.publish_article, name='publish_article'),
 
     # User homepage and articles
     re_path(r'^(?P<username>\w+)/$', views.homepage, name='homepage'),

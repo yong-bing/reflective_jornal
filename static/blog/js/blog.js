@@ -65,28 +65,136 @@ $('.register_btn').click(function () {
     });
 });
 
+// $(document).ready(function () {
+//     // Adjust the number of items per row based on page width
+//     function adjustDataItemsPerRow() {
+//         const dataBlock = $('#category-block');
+//         const dataItems = dataBlock.find('.data-item');
+//         const dataItemWidth = dataItems.first().outerWidth(true);
+//         const containerWidth = dataBlock.width();
+//         const itemsPerRow = Math.floor(containerWidth / dataItemWidth);
+//
+//         dataItems.css('margin-top', '0'); // Reset margin-top for all items
+//
+//         dataItems.each(function (index) {
+//             if (index % itemsPerRow === 0) {
+//                 $(this).css('margin-top', '10px'); // Add margin for new row
+//             }
+//         });
+//     }
+//
+//     adjustDataItemsPerRow(); // Call on page load
+//
+//     $(window).resize(function () {
+//         adjustDataItemsPerRow(); // Adjust on window resize
+//     });
+// });
+
+
 $(document).ready(function () {
-    // Adjust the number of items per row based on page width
-    function adjustDataItemsPerRow() {
-        const dataBlock = $('#category-block');
-        const dataItems = dataBlock.find('.data-item');
-        const dataItemWidth = dataItems.first().outerWidth(true);
-        const containerWidth = dataBlock.width();
-        const itemsPerRow = Math.floor(containerWidth / dataItemWidth);
+    let modal = $('#publishModal');
+    let backdrop = $('#modalBackdrop');
+    let openModalButton = $('#publishButton');
+    let closeModalButtons = $('#closeModal, #closeModalFooter');
+    let csrfmiddlewaretoken = $('[name="csrfmiddlewaretoken"]').val();
 
-        dataItems.css('margin-top', '0'); // Reset margin-top for all items
-
-        dataItems.each(function (index) {
-            if (index % itemsPerRow === 0) {
-                $(this).css('margin-top', '10px'); // Add margin for new row
-            }
-        });
+    function openModal() {
+        modal.addClass('show');
+        modal.css('display', 'block');
+        backdrop.addClass('show');
+        backdrop.css('display', 'block');
+        $('body').addClass('modal-open');
     }
 
-    adjustDataItemsPerRow(); // Call on page load
+    function closeModal() {
+        modal.removeClass('show');
+        modal.css('display', 'none');
+        backdrop.removeClass('show');
+        backdrop.css('display', 'none');
+        $('body').removeClass('modal-open');
+    }
 
-    $(window).resize(function () {
-        adjustDataItemsPerRow(); // Adjust on window resize
+    $('#saveDraft').on('click', function (e) {
+        e.preventDefault();
+        let form = $('#articleCreateForm');
+        $.ajax({
+            type: 'POST',
+            url: form.attr('action'),
+            data: form.serialize() + '&save_draft=true',
+            headers: {
+                'X-CSRFToken': csrfmiddlewaretoken
+            },
+            success: function (response) {
+                if (response.status === 'success') {
+                    window.location.href = '/dashboard/';
+                }
+            },
+            error: function (response) {
+                alert('存为草稿失败，请检查输入内容。');
+            }
+        });
+    });
+
+    openModalButton.on('click', function (e) {
+        e.preventDefault();
+        let form = $('#articleCreateForm');
+        $.ajax({
+            type: 'POST',
+            url: form.attr('action'),
+            data: form.serialize() + '&publish=true',
+            headers: {
+                'X-CSRFToken': csrfmiddlewaretoken
+            },
+            success: function (response) {
+                $('#articleNid').val(response.nid);
+                openModal();
+            },
+            error: function (response) {
+                alert('存在错误，请检查输入内容。');
+            }
+        });
+    });
+
+    closeModalButtons.on('click', function () {
+        closeModal();
+    });
+
+    backdrop.on('click', function () {
+        closeModal();
+    });
+
+    $('#confirmPublish').on('click', function () {
+        let form = $('#articlePublishForm');
+        $.ajax({
+            type: 'POST',
+            url: '{% url "publish_article" 0 %}'.replace('0', form.find('#articleNid').val()),
+            data: form.serialize(),
+            headers: {
+                'X-CSRFToken': csrfmiddlewaretoken
+            },
+            success: function (response) {
+                if (response.status === 'success') {
+                    window.location.href = '/dashboard/';
+                }
+            },
+            error: function (response) {
+                alert('发布失败，请检查输入内容。');
+            }
+        });
     });
 });
 
+document.querySelector('.cover-upload').addEventListener('click', function () {
+    document.getElementById('cover').click();
+});
+
+document.getElementById('cover').addEventListener('change', function (event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            document.getElementById('coverPreview').src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+    }
+});

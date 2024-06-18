@@ -4,27 +4,77 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title></title>
-    <link rel="stylesheet" href="{% static 'blog/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-5.3.3/css/bootstrap.min.css' %}">
+    <script src="{% static 'plugins/jquery-3.7.1/jquery-3.7.1.min.js' %}"></script>
+
+    <link rel="stylesheet" href="{% static 'blog/css/style.css' %}">
 </head>
 <body>
 <div class="container-fluid">
     <div class="row mt-3">
-        <form method="post" class="w-100">
+        <form id="articleCreateForm" class="w-100">
             {% csrf_token %}
-            {{ form.media }}
+            {{ create_form.media }}
             <div class="row mb-3">
                 <div class="col">
-                    {{ form.title }}
+                    {{ create_form.title }}
                 </div>
                 <div class="col-auto">
-                    <button type="submit" class="btn btn-primary">发布</button>
+                    <button type="button" id="saveDraft" class="btn btn-secondary">存为草稿</button>
+                    <button type="button" id="publishButton" class="btn btn-primary">发布</button>
                 </div>
             </div>
             <div class="mb-3">
-                {{ form.content }}
+                {{ create_form.content }}
             </div>
         </form>
+
+        <!-- Modal -->
+        <div class="modal fade" id="publishModal" tabindex="-1" aria-labelledby="publishModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable custom-modal-dialog">
+                <div class="modal-content custom-modal-size">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="publishModalLabel">发布文章</h1>
+                        <button type="button" class="btn-close" id="closeModal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="articlePublishForm">
+                            {% csrf_token %}
+                            <input type="hidden" name="nid" id="articleNid">
+                            <div class="mb-3 row">
+                                <label for="description" class="col-sm-2 col-form-label">文章摘要</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" id="description" name="description"
+                                              rows="3"></textarea>
+                                </div>
+                            </div>
+                            <div class="mb-3 row align-items-center">
+                                <label class="col-sm-2 col-form-label">文章封面</label>
+                                <div class="col-sm-10">
+                                    <div class="position-relative d-inline-block cover-upload">
+                                        <img src="/media/cover/default.jpg" alt="cover" id="coverPreview"
+                                             class="img-fluid rounded">
+                                        <div class="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center">
+                                            <label for="cover"
+                                                   class="text-white bg-dark bg-opacity-50 p-2 rounded">点击上传</label>
+                                        </div>
+                                        <input class="form-control d-none" type="file" id="cover">
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-primary" id="confirmPublish">发布</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Backdrop -->
+        <div class="modal-backdrop fade" id="modalBackdrop"></div>
+
     </div>
 </div>
+
+<script src="{% static 'blog/js/blog.js' %}"></script>
 </body>
 </html>

@@ -105,6 +105,7 @@
     padding: 20px;
     transition: background 0.5s ease;
 }
+
 .carousel-item {
     transition: transform 3s ease !important;
 }
@@ -133,7 +134,23 @@
     bottom: 0;
     right: 20px;
 }
+
 .article-info {
     position: absolute;
     bottom: -15px;
+}
+
+.custom-modal-dialog {
+    display: flex;
+    justify-content: center;
+}
+
+.custom-modal-size {
+    min-width: 770px; /* 默认情况下，最小宽度为100% */
+    min-height: 600px; /* 默认最小高度 */
+}
+
+#coverPreview {
+    width: 120px !important;
+    height: 100px !important;
 }
