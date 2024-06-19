@@ -6,13 +6,12 @@
     <title></title>
     <link rel="stylesheet" href="{% static 'plugins/bootstrap-5.3.3/css/bootstrap.min.css' %}">
     <script src="{% static 'plugins/jquery-3.7.1/jquery-3.7.1.min.js' %}"></script>
-
     <link rel="stylesheet" href="{% static 'blog/css/style.css' %}">
 </head>
 <body>
 <div class="container-fluid">
     <div class="row mt-3">
-        <form id="articleCreateForm" class="w-100">
+        <form id="articleCreateForm" class="w-100" action="{% if article %}{% url 'edit_article' article.nid %}{% else %}{% url 'create_article' %}{% endif %}" method="post">
             {% csrf_token %}
             {{ create_form.media }}
             <div class="row mb-3">
@@ -40,23 +39,20 @@
                     <div class="modal-body">
                         <form id="articlePublishForm">
                             {% csrf_token %}
-                            <input type="hidden" name="nid" id="articleNid">
+                            <input type="hidden" name="nid" id="articleNid" value="{% if article %}{{ article.nid }}{% endif %}">
                             <div class="mb-3 row">
                                 <label for="description" class="col-sm-2 col-form-label">文章摘要</label>
                                 <div class="col-sm-10">
-                                    <textarea class="form-control" id="description" name="description"
-                                              rows="3"></textarea>
+                                    <textarea class="form-control" id="description" name="description" rows="3"></textarea>
                                 </div>
                             </div>
                             <div class="mb-3 row align-items-center">
                                 <label class="col-sm-2 col-form-label">文章封面</label>
                                 <div class="col-sm-10">
                                     <div class="position-relative d-inline-block cover-upload">
-                                        <img src="/media/cover/default.jpg" alt="cover" id="coverPreview"
-                                             class="img-fluid rounded">
+                                        <img src="/media/covers/default.jpg" alt="cover" id="coverPreview" class="img-fluid rounded">
                                         <div class="position-absolute top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center">
-                                            <label for="cover"
-                                                   class="text-white bg-dark bg-opacity-50 p-2 rounded">点击上传</label>
+                                            <label for="cover" class="text-white bg-dark bg-opacity-50 p-2 rounded">点击上传</label>
                                         </div>
                                         <input class="form-control d-none" type="file" id="cover">
                                     </div>
@@ -75,6 +71,10 @@
     </div>
 </div>
 
-<script src="{% static 'blog/js/blog.js' %}"></script>
+<script>
+    let publishArticleUrl = '{% url "publish_article" 0 %}';
+</script>
+<script src="{% static 'blog/js/editor.js' %}"></script>
+
 </body>
 </html>

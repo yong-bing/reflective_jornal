@@ -9,34 +9,35 @@
 
 {% block content %}
     <div class="container-fluid">
-    {% include 'blog/components/nav.html' %}
-    <div class="row">
-        {% render_markdown article.content as rendered %}
+        {% include 'blog/components/nav.html' %}
+        <div class="row">
+            {% render_markdown article.content as rendered %}
 
-        <!-- 左侧栏 -->
-        <div class="col-md-3 bg-light">
-            <div class="sticky-top pt-3">
-                {% sidebar_personal username %}
-                <div class="card toc">
-                    <div class="card-body">
-                        <h5 class="card-title">目录</h5>
-                        <ul class="list-group list-group-flush">
-                           {{ rendered.toc | safe }}
-                        </ul>
+            <!-- 左侧栏 -->
+            <div class="col-md-3 bg-light">
+                <div class="sticky-top pt-3">
+                    {% sidebar_personal username %}
+                    <div class="card toc">
+                        <div class="card-body">
+                            <h5 class="card-title">目录</h5>
+                            <ul class="list-group list-group-flush">
+                                {{ rendered.toc | safe }}
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- 右侧栏 -->
-        <div class="col-md-9 pt-3">
-            <div class="blog-post">
+            <!-- 右侧栏 -->
+            <div class="col-md-9 pt-3">
+                <div class="blog-post">
 
-                <h2>{{ article.title }}</h2>
-                <p class="text-muted">发布时间: {{ article.created_time }}</p>
-                <p class="text-muted">作者: {{ article.user }}</p>
-                <div class="content">
-                    {{ rendered.content | safe }}
+                    <h2>{{ article.title }}</h2>
+                    <p class="text-muted">发布时间: {{ article.created_time }}</p>
+                    <p class="text-muted">作者: {{ article.user }}</p>
+                    <div class="content">
+                        {{ rendered.content | safe }}
+                    </div>
                 </div>
             </div>
         </div>

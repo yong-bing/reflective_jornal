@@ -43,9 +43,13 @@
                             <tr>
                                 <td>{{ article.title }}</td>
                                 <td>{{ article.created_time }}</td>
-                                <td>{{ article.state|yesno:"已发布, 草稿"}}</td>
-                                <td>编辑</td>
-                                <td>删除</td>
+                                <td>{{ article.state|yesno:"已发布, 草稿" }}</td>
+                                <td>
+                                    <button onclick="editArticle({{ article.nid }})">编辑</button>
+                                </td>
+                                <td>
+                                    <button onclick="deleteArticle({{ article.nid }})">删除</button>
+                                </td>
                             </tr>
                         {% endfor %}
                         </tbody>
@@ -54,4 +58,35 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        function deleteArticle(nid) {
+            if (confirm('确定要删除这篇文章吗？')) {
+                $.ajax({
+                    url: '/article/delete/' + nid + '/',
+                    type: 'POST',
+                    data: {
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    success: function (response) {
+                        if (response.status === 'success') {
+                            $('#article-' + nid).remove();
+                            window.location.href = '/dashboard/';
+                        } else {
+                            alert('删除失败');
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert('删除失败: ' + xhr.responseText);
+                    }
+                });
+            }
+        }
+        
+        function editArticle(nid) {
+            window.location.href = '/article/edit/' + nid + '/';
+        }
+    </script>
 {% endblock %}

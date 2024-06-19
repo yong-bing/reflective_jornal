@@ -27,9 +27,9 @@ urlpatterns = [
     path('logout/', views.logout, name='logout'),
 
     # Index and registration
+    path('', views.index, name='index'),
     path('index/', views.index, name='index'),
     path('register/', views.register, name='register'),
-    re_path(r'^$', views.index),
 
     # verification code
     path('get_verification_code/', views.get_verification_code, name='get_verification_code'),
@@ -40,10 +40,14 @@ urlpatterns = [
     # Test path
     path('test/', views.test, name='test'),
 
-    # User dashboard management and article management
+    # User dashboard management
     path('dashboard/', views.dashboard, name='dashboard'),
-    path('dashboard/edit/', views.edit, name='edit_article'),
-    path('dashboard/publish/<int:nid>/', views.publish_article, name='publish_article'),
+
+    # User article management
+    path('article/delete/<int:nid>/', views.delete_article, name='delete_article'),
+    path('article/edit/', views.edit_article, name='create_article'),
+    path('article/edit/<int:nid>/', views.edit_article, name='edit_article'),
+    path('article/publish/<int:nid>/', views.publish_article, name='publish_article'),
 
     # User homepage and articles
     re_path(r'^(?P<username>\w+)/$', views.homepage, name='homepage'),

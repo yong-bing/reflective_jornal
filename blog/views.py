@@ -1,8 +1,9 @@
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, Http404
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 
 from blog import models
 from blog.blog_forms import UserRegisterForm, ArticleCreateForm, ArticlePublishForm
@@ -105,26 +106,6 @@ def dashboard(request):
 
 
 @login_required
-def edit(request):
-    if request.method == 'POST':
-        create_form = ArticleCreateForm(request.POST)
-        if create_form.is_valid():
-            article = create_form.save(commit=False)
-            article.user = request.user
-            article.state = 0
-            article.save()
-            if 'save_draft' in request.POST:
-                return JsonResponse({'status': 'success', 'message': '已保存为草稿!'})
-            elif 'publish' in request.POST:
-                return JsonResponse({'nid': article.nid})
-        else:
-            return JsonResponse({'errors': create_form.errors}, status=400)
-    else:
-        create_form = ArticleCreateForm()
-    return render(request, 'blog/edit.html', {'create_form': create_form})
-
-
-@login_required
 def publish_article(request, nid):
     if request.method == 'POST':
         article = models.Article.objects.filter(nid=nid).first()
@@ -138,3 +119,65 @@ def publish_article(request, nid):
 
 def test(request):
     return JsonResponse({'status': 'success'})
+
+
+@login_required
+def edit_article(request, nid=None):
+    if request.method == 'POST':
+        if nid:
+            article = get_object_or_404(models.Article, nid=nid, user=request.user)
+            create_form = ArticleCreateForm(request.POST, instance=article)
+            publish_form = ArticlePublishForm(request.POST, request.FILES, instance=article)
+        else:
+            create_form = ArticleCreateForm(request.POST)
+            publish_form = ArticlePublishForm(request.POST, request.FILES)
+
+        if create_form.is_valid():
+            article = create_form.save(commit=False)
+            article.user = request.user
+            article.state = 0
+            article.save()
+            if 'save_draft' in request.POST:
+                return JsonResponse({'status': 'success', 'message': '已保存为草稿!'})
+            elif 'publish' in request.POST:
+                # if publish_form.is_valid():
+                #     article = publish_form.save(commit=False)
+                #     article.state = 1
+                #     article.save()
+                #     return JsonResponse({'nid': article.nid})
+                # else:
+                #     return JsonResponse({'errors': publish_form.errors}, status=400)
+                return JsonResponse({'nid': article.nid})
+        else:
+            return JsonResponse({'errors': create_form.errors}, status=400)
+    else:
+        if nid:
+            article = get_object_or_404(models.Article, nid=nid, user=request.user)
+            create_form = ArticleCreateForm(instance=article)
+            publish_form = ArticlePublishForm(instance=article)
+        else:
+            article = None
+            create_form = ArticleCreateForm()
+            publish_form = ArticlePublishForm()
+    context = {
+        'create_form': create_form,
+        'publish_form': publish_form,
+        'article': article
+    }
+
+    return render(request, 'blog/edit.html', context)
+
+
+@login_required
+@require_POST
+def delete_article(request, nid):
+    article = get_object_or_404(models.Article, nid=nid, user=request.user)
+    article.delete()
+    return JsonResponse({'status': 'success', 'message': 'Article deleted successfully'})
+
+
+def get_object_or_404(model, **kwargs):
+    try:
+        return model.objects.get(**kwargs)
+    except model.DoesNotExist:
+        raise Http404(f"No {model._meta.object_name} matches the given query.")
