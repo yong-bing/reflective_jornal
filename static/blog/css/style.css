@@ -140,6 +140,8 @@
     bottom: -15px;
 }
 
+
+/* edit.html  */
 .custom-modal-dialog {
     display: flex;
     justify-content: center;
@@ -153,4 +155,18 @@
 #coverPreview {
     width: 120px !important;
     height: 100px !important;
+}
+
+.cover .overlay-text {
+    position: absolute;
+    width: 75%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
 }

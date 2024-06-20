@@ -61,18 +61,41 @@ class UserRegisterForm(forms.Form):
 class ArticleCreateForm(forms.ModelForm):
     class Meta:
         model = Article
-        fields = ['title', 'content']
+        fields = ['title', 'content', 'state', 'user']
         widgets = {
-            'title': forms.TextInput(attrs={'class': 'form-control article-title', 'placeholder': '请输入文章标题'}),
-            'content': forms.Textarea(attrs={'class': 'mdeditor'}),
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '请输入文章标题'}),
+            'content': forms.Textarea(attrs={'class': 'form-control', 'placeholder': '请输入文章内容'}),
+            'state': forms.HiddenInput(),
+            'user': forms.HiddenInput(),
         }
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user')
+        super(ArticleCreateForm, self).__init__(*args, **kwargs)
+        self.fields['user'].initial = self.user
+
+    def save(self, commit=True):
+        instance = super(ArticleCreateForm, self).save(commit=False)
+        instance.user = self.user
+        instance.state = 0
+        if commit:
+            instance.save()
+        return instance
 
 
 class ArticlePublishForm(forms.ModelForm):
     class Meta:
         model = Article
-        fields = ['desc', 'cover']
+        fields = ['desc', 'cover', 'state']
         widgets = {
-            'desc': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '请输入文章描述'}),
-            'cover': forms.FileInput(attrs={'class': 'form-control'}),
+            'desc': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '请输入文章摘要...'}),
+            'cover': forms.FileInput(attrs={'class': 'd-none', 'id': 'coverUpload'}),
+            'state': forms.HiddenInput(),
         }
+
+    def save(self, commit=True):
+        instance = super(ArticlePublishForm, self).save(commit=False)
+        instance.state = 1
+        if commit:
+            instance.save()
+        return instance

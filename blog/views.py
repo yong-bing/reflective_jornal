@@ -1,8 +1,10 @@
-from django.contrib import auth
+import os
+import re
+
+from django.contrib import auth, messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse, Http404
 from django.shortcuts import render, redirect
-from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from blog import models
@@ -61,6 +63,7 @@ def register(request):
             if avatar is None:
                 avatar = 'avatars/default.png'
 
+            models.Homepage.objects.create(title=username, url=username)
             models.User.objects.create_user(username=username, password=password, email=email, avatar=avatar)
 
         else:
@@ -86,13 +89,13 @@ def homepage(request, username):
     return render(request, 'blog/homepage.html', context)
 
 
-def blog_post(request, username, article_id):
+def article_detail(request, username, article_id):
     article = models.Article.objects.filter(user__username=username, nid=article_id).first()
     context = {
         'username': username,
         'article': article
     }
-    return render(request, 'blog/blog_post.html', context)
+    return render(request, 'blog/article_detail.html', context)
 
 
 @login_required
@@ -109,56 +112,42 @@ def dashboard(request):
 def publish_article(request, nid):
     if request.method == 'POST':
         article = models.Article.objects.filter(nid=nid).first()
-        article.description = request.POST.get('description')
-        article.state = 1  # 1 表示已发布
-        article.save()
-        # return JsonResponse({'redirect': True, 'url': 'dashboard'})
-        return JsonResponse({'status': 'success', 'message': '文章发布成功'})
+        publish_form = ArticlePublishForm(request.POST, request.FILES, instance=article)
+        if publish_form.is_valid():
+            publish_form.save()
+            return JsonResponse({'status': 'success', 'message': '文章发布成功'})
+        else:
+            return JsonResponse({'errors': publish_form.errors}, status=400)
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
 
 def test(request):
-    return JsonResponse({'status': 'success'})
+    return render(request, 'blog/test.html')
 
 
 @login_required
 def edit_article(request, nid=None):
+    article = None
+
+    if nid:
+        article = get_object_or_404(models.Article, nid=nid, user=request.user)
+
     if request.method == 'POST':
-        if nid:
-            article = get_object_or_404(models.Article, nid=nid, user=request.user)
-            create_form = ArticleCreateForm(request.POST, instance=article)
-            publish_form = ArticlePublishForm(request.POST, request.FILES, instance=article)
-        else:
-            create_form = ArticleCreateForm(request.POST)
-            publish_form = ArticlePublishForm(request.POST, request.FILES)
+        create_form = ArticleCreateForm(request.POST, instance=article, user=request.user)
+        publish_form = ArticlePublishForm(request.POST, request.FILES, instance=article)
 
         if create_form.is_valid():
-            article = create_form.save(commit=False)
-            article.user = request.user
-            article.state = 0
-            article.save()
+            article = create_form.save()
             if 'save_draft' in request.POST:
                 return JsonResponse({'status': 'success', 'message': '已保存为草稿!'})
             elif 'publish' in request.POST:
-                # if publish_form.is_valid():
-                #     article = publish_form.save(commit=False)
-                #     article.state = 1
-                #     article.save()
-                #     return JsonResponse({'nid': article.nid})
-                # else:
-                #     return JsonResponse({'errors': publish_form.errors}, status=400)
                 return JsonResponse({'nid': article.nid})
         else:
             return JsonResponse({'errors': create_form.errors}, status=400)
     else:
-        if nid:
-            article = get_object_or_404(models.Article, nid=nid, user=request.user)
-            create_form = ArticleCreateForm(instance=article)
-            publish_form = ArticlePublishForm(instance=article)
-        else:
-            article = None
-            create_form = ArticleCreateForm()
-            publish_form = ArticlePublishForm()
+        create_form = ArticleCreateForm(instance=article, user=request.user)
+        publish_form = ArticlePublishForm(instance=article)
+
     context = {
         'create_form': create_form,
         'publish_form': publish_form,
@@ -172,12 +161,27 @@ def edit_article(request, nid=None):
 @require_POST
 def delete_article(request, nid):
     article = get_object_or_404(models.Article, nid=nid, user=request.user)
+    if article.cover.name != 'covers/default.jpg':
+        cover_path = "." + article.cover.url
+        try:
+            os.remove(cover_path)
+        except FileNotFoundError:
+            pass
+    img_urls = re.findall(r'!\[.*?]\((.*?)\)', article.content)
+    for img_url in img_urls:
+        img_url = "." + img_url.replace('\\', '/')
+        try:
+            os.remove(img_url)
+        except FileNotFoundError:
+            pass
     article.delete()
-    return JsonResponse({'status': 'success', 'message': 'Article deleted successfully'})
+    messages.success(request, '文章删除成功')
+    # return JsonResponse({'status': 'success', 'message': '文章删除成功'})
+    return redirect(dashboard)
 
 
 def get_object_or_404(model, **kwargs):
     try:
         return model.objects.get(**kwargs)
     except model.DoesNotExist:
-        raise Http404(f"No {model._meta.object_name} matches the given query.")
+        raise Http404("找不到指定的对象")

@@ -71,12 +71,14 @@ $(document).ready(function () {
     });
 
     $('#confirmPublish').on('click', function () {
-        let form = $('#articlePublishForm');
+        let formData = new FormData(document.getElementById('articlePublishForm'));
         let publishArticleUrlWithId = publishArticleUrl.replace('0', document.querySelector('#articleNid').value);
         $.ajax({
             type: 'POST',
             url: publishArticleUrlWithId,
-            data: form.serialize(),
+            data: formData,
+            contentType: false,
+            processData: false,
             headers: {
                 'X-CSRFToken': csrfmiddlewaretoken
             },
@@ -92,18 +94,30 @@ $(document).ready(function () {
     });
 });
 
-// 上传封面图片
-document.querySelector('.cover-upload').addEventListener('click', function () {
-    document.getElementById('cover').click();
-});
+// 封面图片上传与预览
+document.addEventListener('DOMContentLoaded', function () {
+    const coverPreview = document.getElementById('coverPreview');
+    const coverInput = document.getElementById('coverUpload');
+    const coverOverlayText = document.getElementById('coverOverlayText');
 
-document.getElementById('cover').addEventListener('change', function (event) {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            document.getElementById('coverPreview').src = e.target.result;
+    // 点击图片时触发文件选择器
+    coverPreview.addEventListener('click', function () {
+        coverInput.click();
+    });
+
+    // 点击文字时触发文件选择器
+    coverOverlayText.addEventListener('click', function () {
+        coverInput.click();
+    });
+
+    // 选择文件时预览图片
+    coverInput.addEventListener('change', function (event) {
+        if (event.target.files && event.target.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                coverPreview.src = e.target.result;
+            }
+            reader.readAsDataURL(event.target.files[0]);
         }
-        reader.readAsDataURL(file);
-    }
+    });
 });

@@ -1,0 +1,27 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block nav %}
+    {% include 'blog/components/nav.html' %}
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+
+            <!-- 左侧栏 -->
+            <div class="col-md-2 bg-light pt-2">
+                {% block column-left %}
+                {% endblock %}
+            </div>
+
+            <!-- 右侧栏 -->
+            <div class="col-md-10 pt-3">
+                {% block column-right %}
+                {% endblock %}
+            </div>
+        
+        </div>
+    
+    </div>
+{% endblock %}

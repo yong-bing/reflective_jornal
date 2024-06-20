@@ -1,92 +1,64 @@
-{% extends 'blog/base.html' %}
+{% extends 'blog/layout_two_column.html' %}
 {% load static %}
 
-{% block nav %}
-    {% include 'blog/components/nav.html' %}
-{% endblock %}
-
-{% block content %}
-    <div class="container-fluid">
-        <div class="row">
-            <!-- 左侧栏 -->
-            <div class="col-md-3 bg-light">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">博客后台</h5>
-                        <ul class="list-group list-group-flush">
-                            <li>新建文章</li>
-                            <li>导入文章</li>
-                            <li>草稿箱</li>
-                            <li>博客搬家</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 右侧栏 -->
-            <div class="col-md-9 pt-3">
-                <h3 class="mb-4">我的文章</h3>
-                <div class="table-responsive">
-                    <table class="table align-middle">
-                        <thead>
-                        <tr>
-                            <td>文章标题</td>
-                            <td>创建时间</td>
-                            <td>状态</td>
-                            <td>操作</td>
-                            <td>操作</td>
-
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for article in articles %}
-                            <tr>
-                                <td>{{ article.title }}</td>
-                                <td>{{ article.created_time }}</td>
-                                <td>{{ article.state|yesno:"已发布, 草稿" }}</td>
-                                <td>
-                                    <button onclick="editArticle({{ article.nid }})">编辑</button>
-                                </td>
-                                <td>
-                                    <button onclick="deleteArticle({{ article.nid }})">删除</button>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+{% block column-left %}
+    <div class="sticky-top pt-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">博客后台</h5>
+                <ul class="list-group list-group-flush">
+                    <li><a href="{% url 'create_article' %}">新建文章</a></li>
+                    <li>导入文章</li>
+                    <li>草稿箱</li>
+                    <li>博客搬家</li>
+                </ul>
             </div>
         </div>
     </div>
 {% endblock %}
 
+{% block column-right %}
+    <h3 class="mb-4">我的文章</h3>
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+            <tr>
+                <td>文章标题</td>
+                <td>创建时间</td>
+                <td>状态</td>
+                <td>操作</td>
+                <td>操作</td>
+            </tr>
+            </thead>
+            <tbody>
+            {% for article in articles %}
+                <tr>
+                    <td><a href="{% url 'article_detail' article.user.username article.nid %}">{{ article.title }}</a>
+                    </td>
+                    <td>{{ article.created_time }}</td>
+                    <td>{{ article.state|yesno:"已发布, 草稿" }}</td>
+                    <td>
+                        <a href="{% url 'edit_article' article.nid %}">编辑</a>
+                    </td>
+                    <td>
+                        <a href="#" onclick="deleteArticle({{ article.nid }}); return false;">删除</a>
+                        <form id="delete-form-{{ article.nid }}" method="post" action="{% url 'delete_article' article.nid %}" style="display: none;">
+                            {% csrf_token %}
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
 {% block script %}
     <script>
-        function deleteArticle(nid) {
+        function deleteArticle(articleId) {
             if (confirm('确定要删除这篇文章吗？')) {
-                $.ajax({
-                    url: '/article/delete/' + nid + '/',
-                    type: 'POST',
-                    data: {
-                        csrfmiddlewaretoken: '{{ csrf_token }}'
-                    },
-                    success: function (response) {
-                        if (response.status === 'success') {
-                            $('#article-' + nid).remove();
-                            window.location.href = '/dashboard/';
-                        } else {
-                            alert('删除失败');
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        alert('删除失败: ' + xhr.responseText);
-                    }
-                });
+                document.getElementById('delete-form-' + articleId).submit();
             }
-        }
-        
-        function editArticle(nid) {
-            window.location.href = '/article/edit/' + nid + '/';
         }
     </script>
 {% endblock %}

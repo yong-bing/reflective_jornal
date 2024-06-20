@@ -51,7 +51,7 @@ urlpatterns = [
 
     # User homepage and articles
     re_path(r'^(?P<username>\w+)/$', views.homepage, name='homepage'),
-    re_path(r'^(?P<username>\w+)/articles/(?P<article_id>\d+)/$', views.blog_post, name='blog_post'),
+    re_path(r'^(?P<username>\w+)/articles/(?P<article_id>\d+)/$', views.article_detail, name='article_detail'),
 
     # Media URL
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
