@@ -6,68 +6,112 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container-fluid">
+    <div class="container-fluid mt-3 custom-container-fluid">
         <div class="row">
-            <div class="col-1 d-none d-md-block sidebar"></div>
-            <div class="col-10 main-content">
-                <div class="index-head">
-                    <div class="container-fluid mt-1">
-                        <div class="row">
-                            <div class="category-block" id="category-block">
-                                {% for item in category_list %}
-                                    <div class="category-item">{{ item }}</div>
-                                {% endfor %}
+            <!-- 主要内容区 -->
+            <div class="col-lg-9">
+                <div class="row row-cols-1 row-cols-md-2 g-4">
+                    <!-- 文章卡片 1 -->
+                    {% for article in articles %}
+                    <div class="col">
+                        <div class="card h-100 shadow-sm post-card">
+                            <img src="/media/{{ article.cover }}" class="card-img-top" alt="{{ article.title }}" height="200px">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">{{ article.title }}</h5>
+                                <p class="card-text text-muted">{{ article.desc }}</p>
+                                <a href="{% url 'article_detail' article.user.username article.nid %}" class="btn btn-dark">阅读全文</a>
+                            </div>
+                            <div class="card-footer bg-transparent border-top-0">
+                                <small class="text-muted">发布于 {{ article.created_time }}</small>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <!-- 文章卡片 2 -->
+                    <div class="col">
+                        <div class="card h-100 shadow-sm post-card">
+                            <img src="https://via.placeholder.com/800x400" class="card-img-top" alt="文章图片">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">可持续生活方式指南</h5>
+                                <p class="card-text text-muted">
+                                    在面对日益严重的环境问题时，采取可持续的生活方式变得越来越重要。本文将为您提供实用的建议...</p>
+                                <a href="#" class="btn btn-dark">阅读全文</a>
+                            </div>
+                            <div class="card-footer bg-transparent border-top-0">
+                                <small class="text-muted">发布于 2024年6月20日</small>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="mt-2 p-4 p-md-5 mb-3 rounded text-body-emphasis bg-body-secondary">
-                    <div class="col-lg-6 px-0">
-                        <h1 class="display-5 fst-italic">{{ article_list.0.title }}</h1>
-                        <p class="lead my-3">{{ article_list.0.desc }}</p>
-                        <p class="lead mb-0"><a href="{% url 'article_detail' article_list.0.user.username article_list.0.nid %}" class="text-body-emphasis fw-bold">Continue reading...</a></p>
+            </div>
+
+            <!-- 侧边栏 -->
+            <div class="col-lg-3">
+                <!-- 热门文章 -->
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold mb-3">热门文章</h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item px-0"><a href="#" class="text-decoration-none text-dark">5G技术如何改变我们的生活</a>
+                            </li>
+                            <li class="list-group-item px-0"><a href="#" class="text-decoration-none text-dark">2024年最值得学习的编程语言</a>
+                            </li>
+                            <li class="list-group-item px-0"><a href="#"
+                                                                class="text-decoration-none text-dark">远程工作的利与弊</a>
+                            </li>
+                            <li class="list-group-item px-0"><a href="#"
+                                                                class="text-decoration-none text-dark">如何培养持续学习的习惯</a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
 
-                <div class="row mb-2">
-                    {% for article in article_list %}
-                        {% if forloop.counter > 1 %}
-                            <div class="col-md-6">
-                                <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-                                    <div class="col p-4 d-flex flex-column position-static">
-                                        <strong class="d-inline-block mb-2 text-primary-emphasis">{{ article.category }}</strong>
-                                        <h3 class="mb-0">{{ article.title }}</h3>
-                                        <div class="mb-1 text-body-secondary">{{ article.create_time }}</div>
-                                        <p class="card-text mb-auto">{{ article.desc }}</p>
-                                        <a href="{% url 'article_detail' article.user.username article.nid %}" class="icon-link gap-1 icon-link-hover stretched-link">Continue
-                                            reading</a>
-                                    </div>
-                                    <div class="col-auto d-none d-lg-block">
-                                        <img src="/media/{{ article.user.avatar }}" alt="image" width="200px">
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
+                <!-- 热门标签 -->
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold mb-3">热门标签</h5>
+                        <div>
+                            <a href="#" class="btn btn-sm btn-outline-secondary m-1">技术</a>
+                            <a href="#" class="btn btn-sm btn-outline-secondary m-1">生活方式</a>
+                            <a href="#" class="btn btn-sm btn-outline-secondary m-1">可持续发展</a>
+                            <a href="#" class="btn btn-sm btn-outline-secondary m-1">人工智能</a>
+                            <a href="#" class="btn btn-sm btn-outline-secondary m-1">健康</a>
+                            <a href="#" class="btn btn-sm btn-outline-secondary m-1">旅行</a>
+                        </div>
+                    </div>
                 </div>
 
-{#                <div class="card mb-3">#}
-{#                    <div class="row g-1 align-items-center">#}
-{#                        <div class="col-2">#}
-{#                            <img src="/media/{{ request.user.avatar }}" class="img-fluid" alt="...">#}
-{#                        </div>#}
-{#                        <div class="col-8">#}
-{#                            <div class="card-body">#}
-{#                                <h5 class="card-title">Card title</h5>#}
-{#                                <p class="card-text">This is a wider card with supporting text below as a natural#}
-{#                                    lead-in to additional content. This content is a little bit longer.</p>#}
-{#                                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
+                <!-- 订阅新闻邮件 -->
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold mb-3">订阅新闻邮件</h5>
+                        <p>获取最新的文章和独家内容！</p>
+                        <form>
+                            <div class="input-group mb-3">
+                                <input type="email" class="form-control" placeholder="输入您的邮箱">
+                                <button class="btn btn-primary" type="submit">订阅</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- 社交媒体链接 -->
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold mb-3">关注我们</h5>
+                        <div>
+                            <a href="#" class="btn btn-outline-primary me-2"><i class="fab fa-facebook"></i></a>
+                            <a href="#" class="btn btn-outline-primary me-2"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="btn btn-outline-primary me-2"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="btn btn-outline-primary me-2"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-1 d-none d-md-block sidebar"></div>
         </div>
     </div>
+{% endblock %}
+
+{% block footer %}
+    {% include 'blog/components/footer.html' %}
 {% endblock %}

@@ -1,0 +1,78 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.navbar {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
+}
+
+.custom-container-fluid {
+    padding: 0 2%;
+}
+
+
+#verification_code_img {
+    cursor: pointer;
+    float: left;
+}
+
+.login, .register {
+    width: 380px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    position: fixed;
+    top: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#NavbarRight {
+    width: 320px;
+}
+
+.offcanvas .user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.offcanvas-title {
+    font-size: 1.25rem;
+}
+
+.user-email {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin: 0;
+}
+
+/* edit.html  */
+.custom-modal-dialog {
+    display: flex;
+    justify-content: center;
+}
+
+.custom-modal-size {
+    min-width: 770px; /* 默认情况下，最小宽度为100% */
+    min-height: 600px; /* 默认最小高度 */
+}
+
+#coverPreview {
+    width: 120px !important;
+    height: 100px !important;
+}
+
+.cover .overlay-text {
+    position: absolute;
+    width: 75%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+}

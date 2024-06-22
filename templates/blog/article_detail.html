@@ -2,6 +2,9 @@
 {% load static %}
 {% load blog_tags %}
 
+{% block title %}
+    <title>{{ article.title }}</title>
+{% endblock %}
 
 {% block style %}
     <link href="{% static 'blog/css/blog_post.css' %}" rel="stylesheet">

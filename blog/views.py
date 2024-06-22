@@ -41,11 +41,15 @@ def logout(request):
 
 
 def index(request):
-    article_list = models.Article.objects.all()
-    category_list = models.Category.objects.all()
+    articles = models.Article.objects.all()
+    categories = models.Category.objects.all()
 
-    return render(request, 'blog/index.html',
-                  {'article_list': article_list, 'category_list': category_list, 'data_list': []})
+    context = {
+        'articles': articles,
+        'categories': categories
+    }
+
+    return render(request, 'blog/index.html', context)
 
 
 def register(request):
