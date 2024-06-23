@@ -1,0 +1,154 @@
+{% extends 'blog/layout_two_column.html' %}
+{% load static %}
+
+{% block column-left %}
+    <div class="d-flex flex-column flex-shrink-0 p-3 bg-light h-100">
+        <h3 class="fs-4 mb-3 text-primary">文章操作</h3>
+        <hr>
+        <ul class="nav nav-pills flex-column mb-auto" id="sidebar-menu">
+            <li class="nav-item">
+                <a href="{% url 'dashboard' %}" class="nav-link link-dark">
+                    <i class="bi bi-arrow-left-circle me-2"></i>
+                    返回仪表盘
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'edit_article' article.nid %}" class="nav-link link-dark">
+                    <i class="bi bi-pencil-square me-2"></i>
+                    编辑文章
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-link link-dark" onclick="togglePublishStatus(); return false;">
+                    <i class="bi bi-toggle-on me-2"></i>
+                    <span id="publish-status-text">{% if article.status %}取消发布{% else %}发布文章{% endif %}</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-link link-dark" onclick="deleteArticle(); return false;">
+                    <i class="bi bi-trash me-2"></i>
+                    删除文章
+                </a>
+            </li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block column-right %}
+    <div class="container py-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">仪表盘</a></li>
+                <li class="breadcrumb-item active" aria-current="page">文章详情</li>
+            </ol>
+        </nav>
+
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body">
+                <h1 class="card-title mb-3">{{ article.title }}</h1>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <span class="badge bg-primary me-2">
+                            <i class="bi bi-person-circle me-1"></i>{{ article.user.username }}
+                        </span>
+                        <span class="badge bg-secondary me-2">
+                            <i class="bi bi-calendar-event me-1"></i>{{ article.created_time|date:"Y-m-d H:i" }}
+                        </span>
+                        <span class="badge {% if article.status %}bg-success{% else %}bg-warning{% endif %}">
+                            <i class="bi bi-bookmark-check me-1"></i>{{ article.status|yesno:"已发布,草稿" }}
+                        </span>
+                    </div>
+                    <div>
+                        <button class="btn btn-outline-primary btn-sm" onclick="copyArticleLink()">
+                            <i class="bi bi-link-45deg me-1"></i>复制链接
+                        </button>
+                    </div>
+                </div>
+                <hr>
+                <div class="article-content">
+                    {{ article.content|safe }}
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title mb-3">文章统计</h5>
+                <div class="row g-4">
+                    <div class="col-md-3">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-eye fs-2 text-primary me-3"></i>
+                            <div>
+                                <h6 class="mb-0">浏览量</h6>
+                                <h4 class="mb-0">{{ article.views }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-chat-left-text fs-2 text-success me-3"></i>
+                            <div>
+                                <h6 class="mb-0">评论数</h6>
+                                <h4 class="mb-0">{{ article.comment_count }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-heart fs-2 text-danger me-3"></i>
+                            <div>
+                                <h6 class="mb-0">点赞数</h6>
+                                <h4 class="mb-0">{{ article.like_count }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-share fs-2 text-info me-3"></i>
+                            <div>
+                                <h6 class="mb-0">分享数</h6>
+                                <h4 class="mb-0">{{ article.share_count }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        function togglePublishStatus() {
+            // 这里添加切换发布状态的 AJAX 请求
+            alert('切换发布状态功能待实现');
+        }
+
+        function deleteArticle() {
+            if (confirm('确定要删除这篇文章吗？此操作不可撤销。')) {
+                // 这里添加删除文章的 AJAX 请求
+                alert('删除文章功能待实现');
+            }
+        }
+
+        function copyArticleLink() {
+            // 这里添加复制文章链接的功能
+            alert('复制链接功能待实现');
+        }
+
+        $(document).ready(function() {
+            // 侧边栏菜单激活效果
+            const $sidebarMenu = $('#sidebar-menu');
+            const $menuItems = $sidebarMenu.find('.nav-link');
+
+            $menuItems.on('mouseenter', function() {
+                $menuItems.removeClass('active').addClass('link-dark');
+                $(this).addClass('active').removeClass('link-dark');
+            });
+
+            $sidebarMenu.on('mouseleave', function() {
+                $menuItems.removeClass('active').addClass('link-dark');
+            });
+        });
+    </script>
+{% endblock %}

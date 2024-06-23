@@ -1,27 +1,51 @@
 /* Custom CSS */
-.blog-post {
+.article-background {
+    /*background-image: ;*/
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    position: relative;
+}
+.article-background::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(255, 255, 255, 0.9);  /* 白色半透明遮罩 */
+}
+.article-content-wrapper {
+    position: relative;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.article-content {
     margin: 2rem;
 }
 
-.blog-post h1, .blog-post h2, .blog-post h3, .blog-post h4, .blog-post h5, .blog-post h6 {
+.article-content h1, .article-content h2, .article-content h3, .article-content h4, .article-content h5, .article-content h6 {
     margin-top: 1.5rem;
     margin-bottom: 1rem;
 }
 
-.blog-post p {
+.article-content p {
     margin-bottom: 1.25rem;
 }
 
-.blog-post a {
+.article-content a {
     color: #0d6efd;
     text-decoration: underline;
 }
 
-.blog-post a:hover {
+.article-content a:hover {
     color: #0a58ca;
 }
 
-.blog-post img {
+.article-content img {
     max-width: 70%;
     height: auto;
     margin: 1rem auto;
@@ -29,21 +53,21 @@
 
 }
 
-.blog-post blockquote {
+.article-content blockquote {
     padding: 1rem 1.25rem;
     margin: 1.5rem 0;
     border-left: 0.25rem solid #dfe2e5;
     background-color: #f8f9fa;
 }
 
-.blog-post code {
+.article-content code {
     background-color: #f8f9fa;
     padding: 0.2rem 0.4rem;
     font-size: 85%;
     border-radius: 0.25rem;
 }
 
-.blog-post pre code {
+.article-content pre code {
     background-color: #343a40;
     color: #f8f9fa;
     padding: 1rem;

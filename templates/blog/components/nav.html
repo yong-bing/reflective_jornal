@@ -13,7 +13,7 @@
             </ul>
             <form class="d-flex me-2">
                 <input class="form-control me-2" type="search" placeholder="搜索文章..." aria-label="Search">
-                <button class="btn btn-outline-primary" type="submit" aria-label="搜索"><i class="fas fa-search"></i></button>
+                <button class="btn btn-outline-primary" type="submit" aria-label="搜索"><i class="bi bi-search"></i></button>
             </form>
             {% if request.user.is_authenticated %}
                 <!-- 大屏幕显示头像和弹出菜单 -->
@@ -21,7 +21,7 @@
                     <button class="btn btn-link p-0 border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#NavbarRight"
                             aria-controls="NavbarRight" aria-label="用户菜单">
                         <img src="/media/{{ request.user.avatar }}" alt="{{ request.user.username }}" width="32"
-                             height="32" class="rounded-circle">
+                             height="32" class="rounded-circle" loading="lazy">
                     </button>
                 </div>
                 <!-- 移动端显示在折叠菜单中 -->
@@ -51,10 +51,10 @@
 
 {% if request.user.is_authenticated %}
 <!-- 右侧弹出的用户菜单 -->
-<div class="offcanvas offcanvas-end" tabindex="-1" id="NavbarRight"  aria-labelledby="NavbarRightLabel">
+<div class="offcanvas offcanvas-end" tabindex="-1" id="NavbarRight" aria-labelledby="NavbarRightLabel">
     <div class="offcanvas-header">
         <img src="/media/{{ request.user.avatar }}" alt="{{ request.user.username }}" width="36"
-             height="36" class="rounded-circle me-3">
+             height="36" class="rounded-circle me-3" loading="lazy">
         <div class="user-info">
             <h4 class="offcanvas-title" id="NavbarRightLabel">{{ request.user.username }}</h4>
             <p class="user-email">{{ request.user.email }}</p>

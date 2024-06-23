@@ -61,11 +61,11 @@ class UserRegisterForm(forms.Form):
 class ArticleCreateForm(forms.ModelForm):
     class Meta:
         model = Article
-        fields = ['title', 'content', 'state', 'user']
+        fields = ['title', 'content', 'status', 'user']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '请输入文章标题'}),
             'content': forms.Textarea(attrs={'class': 'form-control', 'placeholder': '请输入文章内容'}),
-            'state': forms.HiddenInput(),
+            'status': forms.HiddenInput(),
             'user': forms.HiddenInput(),
         }
 
@@ -77,7 +77,7 @@ class ArticleCreateForm(forms.ModelForm):
     def save(self, commit=True):
         instance = super(ArticleCreateForm, self).save(commit=False)
         instance.user = self.user
-        instance.state = 0
+        instance.status = 0
         if commit:
             instance.save()
         return instance
@@ -86,16 +86,16 @@ class ArticleCreateForm(forms.ModelForm):
 class ArticlePublishForm(forms.ModelForm):
     class Meta:
         model = Article
-        fields = ['desc', 'cover', 'state']
+        fields = ['desc', 'cover', 'status']
         widgets = {
             'desc': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '请输入文章摘要...'}),
             'cover': forms.FileInput(attrs={'class': 'd-none', 'id': 'coverUpload'}),
-            'state': forms.HiddenInput(),
+            'status': forms.HiddenInput(),
         }
 
     def save(self, commit=True):
         instance = super(ArticlePublishForm, self).save(commit=False)
-        instance.state = 1
+        instance.status = 1
         if commit:
             instance.save()
         return instance

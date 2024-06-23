@@ -6,22 +6,18 @@ $(document).ready(function () {
     let csrfmiddlewaretoken = $('[name="csrfmiddlewaretoken"]').val();
 
     function openModal() {
-        modal.addClass('show');
-        modal.css('display', 'block');
-        backdrop.addClass('show');
-        backdrop.css('display', 'block');
+        modal.addClass('show').css('display', 'block');
+        backdrop.addClass('show').css('display', 'block');
         $('body').addClass('modal-open');
     }
 
     function closeModal() {
-        modal.removeClass('show');
-        modal.css('display', 'none');
-        backdrop.removeClass('show');
-        backdrop.css('display', 'none');
+        modal.removeClass('show').css('display', 'none');
+        backdrop.removeClass('show').css('display', 'none');
         $('body').removeClass('modal-open');
     }
 
-    $('#saveDraft').on('click', function (e) {
+    $('#saveDraft').click(function (e) {
         e.preventDefault();
         let form = $('#articleCreateForm');
         $.ajax({
@@ -42,7 +38,7 @@ $(document).ready(function () {
         });
     });
 
-    openModalButton.on('click', function (e) {
+    openModalButton.click(function (e) {
         e.preventDefault();
         let form = $('#articleCreateForm');
         $.ajax({
@@ -62,17 +58,12 @@ $(document).ready(function () {
         });
     });
 
-    closeModalButtons.on('click', function () {
-        closeModal();
-    });
+    closeModalButtons.click(closeModal);
+    backdrop.click(closeModal);
 
-    backdrop.on('click', function () {
-        closeModal();
-    });
-
-    $('#confirmPublish').on('click', function () {
-        let formData = new FormData(document.getElementById('articlePublishForm'));
-        let publishArticleUrlWithId = publishArticleUrl.replace('0', document.querySelector('#articleNid').value);
+    $('#confirmPublish').click(function (e) {
+        let formData = new FormData($('#articlePublishForm')[0]);
+        let publishArticleUrlWithId = publishArticleUrl.replace('0', $('#articleNid').val());
         $.ajax({
             type: 'POST',
             url: publishArticleUrlWithId,
@@ -92,30 +83,23 @@ $(document).ready(function () {
             }
         });
     });
-});
 
-// 封面图片上传与预览
-document.addEventListener('DOMContentLoaded', function () {
-    const coverPreview = document.getElementById('coverPreview');
-    const coverInput = document.getElementById('coverUpload');
-    const coverOverlayText = document.getElementById('coverOverlayText');
+    // 封面图片上传与预览
+    const $coverPreview = $('#coverPreview');
+    const $coverInput = $('#coverUpload');
+    const $coverOverlayText = $('#coverOverlayText');
 
-    // 点击图片时触发文件选择器
-    coverPreview.addEventListener('click', function () {
-        coverInput.click();
-    });
-
-    // 点击文字时触发文件选择器
-    coverOverlayText.addEventListener('click', function () {
-        coverInput.click();
+    // 点击图片或文字时触发文件选择器
+    $coverPreview.add($coverOverlayText).click(function () {
+        $coverInput.click();
     });
 
     // 选择文件时预览图片
-    coverInput.addEventListener('change', function (event) {
+    $coverInput.change(function (event) {
         if (event.target.files && event.target.files[0]) {
-            const reader = new FileReader();
+            let reader = new FileReader();
             reader.onload = function (e) {
-                coverPreview.src = e.target.result;
+                $coverPreview.attr('src', e.target.result);
             }
             reader.readAsDataURL(event.target.files[0]);
         }

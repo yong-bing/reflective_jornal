@@ -41,12 +41,12 @@ def logout(request):
 
 
 def index(request):
-    articles = models.Article.objects.all()
+    articles = models.Article.objects.all().order_by('-created_time')
     categories = models.Category.objects.all()
 
     context = {
         'articles': articles,
-        'categories': categories
+        'categories': categories,
     }
 
     return render(request, 'blog/index.html', context)
@@ -95,6 +95,8 @@ def homepage(request, username):
 
 def article_detail(request, username, article_id):
     article = models.Article.objects.filter(user__username=username, nid=article_id).first()
+    if article:
+        article.read_count += 1
     context = {
         'username': username,
         'article': article
@@ -106,8 +108,13 @@ def article_detail(request, username, article_id):
 def dashboard(request):
     # 查询当前登录用户的所有文章
     articles = models.Article.objects.filter(user=request.user)
+    # 统计其中的草稿数量和已发布数量
+    draft_count = articles.filter(status=0).count()
+    published_count = articles.filter(status=1).count()
     context = {
-        'articles': articles
+        'articles': articles,
+        'draft_count': draft_count,
+        'published_count': published_count
     }
     return render(request, 'blog/dashboard.html', context)
 

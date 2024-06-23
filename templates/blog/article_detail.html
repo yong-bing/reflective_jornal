@@ -1,39 +1,163 @@
-{% extends 'blog/layout_two_column.html' %}
-{% load static %}
+{% extends 'blog/base.html' %}
 {% load blog_tags %}
+{% load static %}
 
-{% block title %}
-    <title>{{ article.title }}</title>
+{% block nav %}
+    {% include 'blog/components/nav.html' %}
 {% endblock %}
 
-{% block style %}
-    <link href="{% static 'blog/css/blog_post.css' %}" rel="stylesheet">
+{% block script %}
+    <link href="{% static 'blog/css/article-detail.css' %}" rel="stylesheet">
 {% endblock %}
 
-{% block column-left %}
-    <div class="sticky-top pt-3">
-        {% sidebar_personal username %}
-        <div class="card toc">
-            <div class="card-body">
-                <h5 class="card-title">目录</h5>
-                <ul class="list-group list-group-flush">
-                    {% render_markdown article.content as rendered %}
-                    {{ rendered.toc | safe }}
-                </ul>
+
+{% block content %}
+    <div class="container-fluid custom-container-fluid">
+        <div class="row">
+            <!-- 右侧主要内容 -->
+            <div class="col-md-9 ms-sm-auto col-lg-9 px-md-4 article-background">
+                <div class="article-content-wrapper">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">{{ article.title }}</h1>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <button type="button" class="btn btn-sm btn-outline-secondary me-2" onclick="likeArticle()">
+                                <i class="bi bi-heart"></i> 点赞 (<span id="like-count">{{ article.like_count }}</span>)
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="shareArticle()">
+                                <i class="bi bi-share"></i> 分享
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="article-meta mb-4">
+                        <span class="me-3"><i class="bi bi-person-circle"></i> {{ article.user.username }}</span>
+                        <span class="me-3"><i
+                                class="bi bi-calendar-event"></i> {{ article.created_time|date:"Y-m-d H:i" }}</span>
+                        <span><i class="bi bi-eye"></i> {{ article.views }} 次浏览</span>
+                    </div>
+
+                    <div class="article-content mb-5">
+                        {% render_markdown article.content as rendered %}
+                        {{ rendered.content | safe }}
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">评论 ({{ article.comment_count }})</h5>
+                        </div>
+                        <div class="card-body">
+                            {% for comment in comments %}
+                                <div class="d-flex mb-4">
+                                    <img src="{% static '/{{ article.user.avator }}' %}" class="rounded-circle me-3"
+                                         width="50" height="50" alt="User Avatar">
+                                    <div>
+                                        <h6 class="mb-1">{{ comment.user.username }}</h6>
+                                        <p class="mb-1">{{ comment.content }}</p>
+                                        <small class="text-muted">{{ comment.created_time|date:"Y-m-d H:i" }}</small>
+                                    </div>
+                                </div>
+                            {% empty %}
+                                <p class="text-muted">暂无评论，来做第一个评论的人吧！</p>
+                            {% endfor %}
+
+                            <form>
+                                <div class="mb-3">
+                                    <label for="commentContent" class="form-label">发表评论</label>
+                                    <textarea class="form-control" id="commentContent" rows="3" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">提交评论</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            <!-- 左侧固定栏 -->
+            <nav id="sidebarMenu" class="col-md-3 col-lg-3 d-md-block bg-light sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <!-- 目录卡片 -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">文章目录</h5>
+                        </div>
+                        <div class="card-body toc">
+                            {% render_markdown article.content as rendered %}
+                            {{ rendered.toc | safe }}
+                        </div>
+                    </div>
+
+                    <!-- 相关文章推荐卡片 -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">相关文章</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                {% for related_article in related_articles %}
+                                    <li class="mb-2">
+                                        <a href="{% url 'article_detail' related_article.id %}"
+                                           class="text-decoration-none">
+                                            {{ related_article.title }}
+                                        </a>
+                                    </li>
+                                {% empty %}
+                                    <li class="text-muted">暂无相关文章</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 标签云卡片 -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">标签云</h5>
+                        </div>
+                        <div class="card-body">
+                            {% for tag in article.tags.all %}
+                                <a href="{% url 'tag_articles' tag.slug %}"
+                                   class="btn btn-outline-secondary btn-sm mb-2 me-2">
+                                    {{ tag.name }}
+                                </a>
+                            {% empty %}
+                                <p class="text-muted">暂无标签</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- 作者信息卡片 -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">关于作者</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="{% static 'images/avatar.png' %}" class="rounded-circle me-3" width="60"
+                                     height="60" alt="Author Avatar">
+                                <div>
+                                    <h6 class="mb-0">{{ article.user.username }}</h6>
+                                    <small class="text-muted">{{ article.user.profile.title }}</small>
+                                </div>
+                            </div>
+                            <p class="mb-2">{{ article.user.profile.bio }}</p>
+                            <button class="btn btn-outline-primary btn-sm">关注作者</button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
         </div>
     </div>
 {% endblock %}
 
+{% block extra_js %}
+    <script>
+        function likeArticle() {
+            // 实现点赞功能
+            alert('点赞功能待实现');
+        }
 
-{% block column-right %}
-    <div class="blog-post">
-        <h1>{{ article.title }}</h1>
-        <p class="text-muted">发布时间: {{ article.created_time }}</p>
-        <p class="text-muted">作者: {{ article.user }}</p>
-        <div class="content">
-            {% render_markdown article.content as rendered %}
-            {{ rendered.content | safe }}
-        </div>
-    </div>
+        function shareArticle() {
+            // 实现分享功能
+            alert('分享功能待实现');
+        }
+    </script>
 {% endblock %}
