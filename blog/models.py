@@ -60,7 +60,7 @@ class Article(models.Model):
     like_count = models.IntegerField(default=0)
     user = models.ForeignKey(to='User', to_field='nid', on_delete=models.CASCADE, related_name='articles')
     status = models.IntegerField(choices=((0, 'draft'), (1, 'published')), default=0)
-    read_count = models.IntegerField(default=0)
+    views = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title

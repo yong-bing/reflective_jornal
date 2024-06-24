@@ -1,32 +1,22 @@
 {% extends 'blog/base.html' %}
 {% load blog_tags %}
 {% load static %}
+{% block style %}
+    <link href="{% static 'blog/css/article-detail.css' %}" rel="stylesheet">
+{% endblock %}
 
 {% block nav %}
     {% include 'blog/components/nav.html' %}
 {% endblock %}
 
-{% block script %}
-    <link href="{% static 'blog/css/article-detail.css' %}" rel="stylesheet">
-{% endblock %}
-
-
 {% block content %}
     <div class="container-fluid custom-container-fluid">
         <div class="row">
-            <!-- 右侧主要内容 -->
-            <div class="col-md-9 ms-sm-auto col-lg-9 px-md-4 article-background">
+            <!-- 左侧主要内容 -->
+            <div class="col-md-9 col-lg-9 px-md-4 article-background">
                 <div class="article-content-wrapper">
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                         <h1 class="h2">{{ article.title }}</h1>
-                        <div class="btn-toolbar mb-2 mb-md-0">
-                            <button type="button" class="btn btn-sm btn-outline-secondary me-2" onclick="likeArticle()">
-                                <i class="bi bi-heart"></i> 点赞 (<span id="like-count">{{ article.like_count }}</span>)
-                            </button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="shareArticle()">
-                                <i class="bi bi-share"></i> 分享
-                            </button>
-                        </div>
                     </div>
 
                     <div class="article-meta mb-4">
@@ -41,6 +31,16 @@
                         {{ rendered.content | safe }}
                     </div>
 
+                    <!-- 点赞和分享功能 -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <button type="button" class="btn btn-outline-primary" onclick="likeArticle()">
+                            <i class="bi bi-heart"></i> 点赞 (<span id="like-count">{{ article.like_count }}</span>)
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="shareArticle()">
+                            <i class="bi bi-share"></i> 分享
+                        </button>
+                    </div>
+
                     <div class="card mb-4">
                         <div class="card-header">
                             <h5 class="mb-0">评论 ({{ article.comment_count }})</h5>
@@ -48,8 +48,8 @@
                         <div class="card-body">
                             {% for comment in comments %}
                                 <div class="d-flex mb-4">
-                                    <img src="{% static '/{{ article.user.avator }}' %}" class="rounded-circle me-3"
-                                         width="50" height="50" alt="User Avatar">
+                                    <img src="{% static comment.user.avatar %}" class="rounded-circle me-3" width="50"
+                                         height="50" alt="User Avatar">
                                     <div>
                                         <h6 class="mb-1">{{ comment.user.username }}</h6>
                                         <p class="mb-1">{{ comment.content }}</p>
@@ -60,7 +60,7 @@
                                 <p class="text-muted">暂无评论，来做第一个评论的人吧！</p>
                             {% endfor %}
 
-                            <form>
+                            <form id="commentForm">
                                 <div class="mb-3">
                                     <label for="commentContent" class="form-label">发表评论</label>
                                     <textarea class="form-control" id="commentContent" rows="3" required></textarea>
@@ -72,92 +72,83 @@
                 </div>
             </div>
 
-            <!-- 左侧固定栏 -->
-            <nav id="sidebarMenu" class="col-md-3 col-lg-3 d-md-block bg-light sidebar collapse">
-                <div class="position-sticky pt-3">
-                    <!-- 目录卡片 -->
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <h5 class="mb-0">文章目录</h5>
-                        </div>
-                        <div class="card-body toc">
-                            {% render_markdown article.content as rendered %}
-                            {{ rendered.toc | safe }}
-                        </div>
-                    </div>
-
-                    <!-- 相关文章推荐卡片 -->
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <h5 class="mb-0">相关文章</h5>
-                        </div>
-                        <div class="card-body">
-                            <ul class="list-unstyled">
-                                {% for related_article in related_articles %}
-                                    <li class="mb-2">
-                                        <a href="{% url 'article_detail' related_article.id %}"
-                                           class="text-decoration-none">
-                                            {{ related_article.title }}
-                                        </a>
-                                    </li>
-                                {% empty %}
-                                    <li class="text-muted">暂无相关文章</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- 标签云卡片 -->
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <h5 class="mb-0">标签云</h5>
-                        </div>
-                        <div class="card-body">
-                            {% for tag in article.tags.all %}
-                                <a href="{% url 'tag_articles' tag.slug %}"
-                                   class="btn btn-outline-secondary btn-sm mb-2 me-2">
-                                    {{ tag.name }}
-                                </a>
-                            {% empty %}
-                                <p class="text-muted">暂无标签</p>
-                            {% endfor %}
-                        </div>
-                    </div>
-
-                    <!-- 作者信息卡片 -->
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <h5 class="mb-0">关于作者</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="d-flex align-items-center mb-3">
-                                <img src="{% static 'images/avatar.png' %}" class="rounded-circle me-3" width="60"
-                                     height="60" alt="Author Avatar">
-                                <div>
-                                    <h6 class="mb-0">{{ article.user.username }}</h6>
-                                    <small class="text-muted">{{ article.user.profile.title }}</small>
+            <!-- 右侧固定栏 -->
+            <div class="col-md-3 col-lg-3 d-none d-md-block mt-5">
+                <nav id="sidebarMenu" class="sidebar">
+                    <div class="position-sticky">
+                        <!-- 目录卡片 -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">文章目录</h5>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="toc">
+                                    {% render_markdown article.content as rendered %}
+                                    {{ rendered.toc | safe }}
                                 </div>
                             </div>
-                            <p class="mb-2">{{ article.user.profile.bio }}</p>
-                            <button class="btn btn-outline-primary btn-sm">关注作者</button>
+                        </div>
+
+                        <!-- 标签云卡片 -->
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">标签云</h5>
+                            </div>
+                            <div class="card-body">
+                                {% for tag in article.tags.all %}
+                                    <a href="{% url 'tag_articles' tag.slug %}"
+                                       class="btn btn-outline-secondary btn-sm mb-2 me-2">
+                                        {{ tag.name }}
+                                    </a>
+                                {% empty %}
+                                    <p class="text-muted">暂无标签</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <!-- 作者信息卡片 -->
+                        <div class="card mb-4 shadow-sm">
+                            <div class="card-header bg-light">
+                                <h5 class="mb-0">关于作者</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <img src="{{ '/media/avatars/default.jpg' }}" class="rounded-circle me-3" width="64"
+                                         height="64" alt="Author Avatar">
+                                    <div>
+                                        <h5 class="card-title mb-0">{{ article.user.username }}</h5>
+                                        <p class="card-text text-muted mb-0">{{ article.user.signature }}</p>
+                                    </div>
+                                </div>
+                                <div class="row text-center mb-3">
+                                    <div class="col">
+                                        <h6 class="mb-0"><i
+                                                class="bi bi-file-text me-1"></i>{{ article.user.articles.count }}</h6>
+                                        <small class="text-muted">文章</small>
+                                    </div>
+                                    <div class="col">
+                                        <h6 class="mb-0"><i
+                                                class="bi bi-people me-1"></i>{{ article.user.followers.count }}</h6>
+                                        <small class="text-muted">粉丝</small>
+                                    </div>
+                                    <div class="col">
+                                        <h6 class="mb-0"><i
+                                                class="bi bi-heart me-1"></i>{{ article.user.likes_received }}</h6>
+                                        <small class="text-muted">获赞</small>
+                                    </div>
+                                </div>
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-primary" type="button">
+                                        <i class="bi bi-person-plus-fill me-2"></i>关注作者
+                                    </button>
+                                    <button class="btn btn-outline-secondary" type="button">
+                                        <i class="bi bi-chat-text-fill me-2"></i>发送消息
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </nav>
+                </nav>
+            </div>
         </div>
     </div>
-{% endblock %}
-
-{% block extra_js %}
-    <script>
-        function likeArticle() {
-            // 实现点赞功能
-            alert('点赞功能待实现');
-        }
-
-        function shareArticle() {
-            // 实现分享功能
-            alert('分享功能待实现');
-        }
-    </script>
 {% endblock %}
