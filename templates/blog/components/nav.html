@@ -20,7 +20,7 @@
                 <div class="d-none d-lg-block">
                     <button class="btn btn-link p-0 border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#NavbarRight"
                             aria-controls="NavbarRight" aria-label="用户菜单">
-                        <img src="/media/{{ request.user.avatar }}" alt="{{ request.user.username }}" width="32"
+                        <img src="{{ MEDIA_URL }}{{ request.user.avatar }}" alt="{{ request.user.username }}" width="32"
                              height="32" class="rounded-circle" loading="lazy">
                     </button>
                 </div>
@@ -53,7 +53,7 @@
 <!-- 右侧弹出的用户菜单 -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="NavbarRight" aria-labelledby="NavbarRightLabel">
     <div class="offcanvas-header">
-        <img src="/media/{{ request.user.avatar }}" alt="{{ request.user.username }}" width="36"
+        <img src="{{ MEDIA_URL }}{{ request.user.avatar }}" alt="{{ request.user.username }}" width="36"
              height="36" class="rounded-circle me-3" loading="lazy">
         <div class="user-info">
             <h4 class="offcanvas-title" id="NavbarRightLabel">{{ request.user.username }}</h4>

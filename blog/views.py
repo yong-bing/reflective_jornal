@@ -63,9 +63,8 @@ def register(request):
             password = user_form.cleaned_data.get('password')
             email = user_form.cleaned_data.get('email')
             avatar = user_form.cleaned_data.get('avatar')
-
             if avatar is None:
-                avatar = 'avatars/default.png'
+                avatar = 'avatars/default.jpg'
 
             models.Homepage.objects.create(title=username, url=username)
             models.User.objects.create_user(username=username, password=password, email=email, avatar=avatar)

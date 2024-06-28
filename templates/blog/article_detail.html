@@ -112,7 +112,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="d-flex align-items-center mb-3">
-                                    <img src="{{ '/media/avatars/default.jpg' }}" class="rounded-circle me-3" width="64"
+                                    <img src= "{{ MEDIA_URL }}{{ article.user.avatar }}" class="rounded-circle me-3" width="64"
                                          height="64" alt="Author Avatar">
                                     <div>
                                         <h5 class="card-title mb-0">{{ article.user.username }}</h5>

@@ -29,7 +29,7 @@
                 {{ create_form.content }}
             </div>
             {{ create_form.user }}
-            {{ create_form.state }}
+            {{ create_form.status }}
         </form>
 
         <!-- Modal -->
@@ -55,7 +55,7 @@
                                 <label class="col-sm-2 col-form-label">文章封面</label>
                                 <div class="col-sm-4">
                                     <div class="position-relative d-inline-block cover">
-                                        <img src="/media/{{ publish_form.cover.value }}" alt="cover" id="coverPreview"
+                                        <img src="{{ MEDIA_URL }}{{ publish_form.cover.value }}" alt="cover" id="coverPreview"
                                              class="img-fluid rounded" style="cursor: pointer;">
                                         <div class="overlay-text" id="coverOverlayText">点击上传</div>
                                         {{ publish_form.cover }}
@@ -63,7 +63,7 @@
                                 </div>
                             </div>
                             <button type="button" class="btn btn-primary" id="confirmPublish">发布</button>
-                            {{ publish_form.state }}
+                            {{ publish_form.status }}
                         </form>
                     </div>
                 </div>
