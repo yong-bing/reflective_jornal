@@ -12,6 +12,12 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import os.path
 from pathlib import Path
 
+try:
+    import custom_settings
+except ImportError:
+    custom_settings = None
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -22,10 +28,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-gp+2j!7xkb)j)3=$p$6hkz#5y-g=+3_*%v52dmuoalnkmq&dfp'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = False
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -63,6 +68,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
             ],
         },
     },
@@ -115,9 +121,10 @@ AUTH_USER_MODEL = 'blog.User'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
+    os.path.join(BASE_DIR, 'blog/static'),
 ]
 
 # 用户上传文件
@@ -148,3 +155,10 @@ MDEDITOR_CONFIGS = {
 }
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
+
+
+# Custom settings
+if custom_settings:
+    for key in dir(custom_settings):
+        if key.isupper():
+            globals()[key] = getattr(custom_settings, key)

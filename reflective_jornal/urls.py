@@ -50,9 +50,14 @@ urlpatterns = [
     path('article/publish/<int:nid>/', views.publish_article, name='publish_article'),
 
     # User homepage and articles
-    re_path(r'^(?P<username>\w+)/$', views.homepage, name='homepage'),
-    re_path(r'^(?P<username>\w+)/articles/(?P<article_id>\d+)/$', views.article_detail, name='article_detail'),
+    # re_path(r'^(?P<username>\w+)/$', views.homepage, name='homepage'),
+    re_path(r'^user/(?P<username>\w+)/$', views.homepage, name='homepage'),
+    re_path(r'^(?P<username>\w+)/articles/(?P<article_id>\d+)/$', views.article_detail, name='article_detail')
 
-    # Media URL
-    re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]
+
+# Media URL ONLY IN DEV
+if settings.DEBUG:
+    urlpatterns += [
+        re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT})
+    ]

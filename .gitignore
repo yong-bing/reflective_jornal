@@ -169,3 +169,4 @@ cython_debug/
 .idea
 runs
 db.sqlite3
+db/
