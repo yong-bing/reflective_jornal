@@ -1,6 +1,6 @@
 FROM python:3.10.14
 
-RUN apt-get update && apt-get install -y netcat-openbsd
+RUN apt-get update && apt-get upgrade -y
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1

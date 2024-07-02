@@ -96,6 +96,7 @@ def article_detail(request, username, article_id):
     article = models.Article.objects.filter(user__username=username, nid=article_id).first()
     if article:
         article.views += 1
+        article.save()
     context = {
         'username': username,
         'article': article

@@ -34,7 +34,7 @@ def sidebar_personal(username):
 
 @register.simple_tag(name='render_markdown')
 def render_markdown(text):
-    extras = ['toc', 'fenced-code-blocks']
+    extras = ['toc', 'fenced-code-blocks', 'latex', 'code-friendly', 'math-expansion']
     markdown_html = markdown2.markdown(text, extras=extras)
     return {
         'toc': mark_safe(markdown_html.toc_html),

@@ -7,7 +7,7 @@ from PIL import Image, ImageDraw, ImageFont
 def create_code(request):
     img = Image.new('RGB', (120, 40), color=(255, 255, 255))
     draw = ImageDraw.Draw(img)
-    font = ImageFont.truetype('static/blog/fonts/kumo.ttf', 40)
+    font = ImageFont.truetype('blog/static/blog/fonts/kumo.ttf', 40)
     code = ''
     for i in range(4):
         random_num = str(random.randint(0, 9))

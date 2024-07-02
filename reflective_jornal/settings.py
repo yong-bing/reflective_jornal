@@ -151,6 +151,7 @@ MDEDITOR_CONFIGS = {
         'placeholder': 'Enjoy Markdown! coding now...',  # Edit box placeholder
         'toc': True,
         'lineWrapping': True,  # Whether to open the line wrapping
+        'tex': True
     }
 }
 
