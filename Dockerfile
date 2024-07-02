@@ -1,6 +1,8 @@
 FROM python:3.10.14
 
-RUN apt-get update && apt-get upgrade -y
+RUN touch /etc/apt/sources.list && \
+    echo "deb http://mirrors.ustc.edu.cn/debian buster main" > /etc/apt/sources.list && \
+    apt-get update && apt-get upgrade -y
 
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
