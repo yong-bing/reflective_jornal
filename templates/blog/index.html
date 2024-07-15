@@ -73,7 +73,7 @@
                                     </div>
                                     <div class="card-footer bg-transparent border-top-0 d-flex justify-content-between align-items-center">
                                         <small class="text-muted"><a class="text-decoration-none"
-                                                                     href="{% url 'homepage' article.user.username %}">{{ article.user.username }}</a> {{ article.created_time|date:"Y年m月d日" }}
+                                                                     href="{% url 'personal_homepage' article.user.username %}">{{ article.user.username }}</a> {{ article.created_time|date:"Y年m月d日" }}
                                         </small>
                                         <a href="{% url 'article_detail' article.user.username article.nid %}"
                                            class="btn btn-outline-primary btn-sm">阅读全文</a>

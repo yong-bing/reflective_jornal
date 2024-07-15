@@ -4,7 +4,7 @@ from io import BytesIO
 from PIL import Image, ImageDraw, ImageFont
 
 
-def create_code(request):
+def create_captcha(request):
     img = Image.new('RGB', (120, 40), color=(255, 255, 255))
     draw = ImageDraw.Draw(img)
     font = ImageFont.truetype('blog/static/blog/fonts/kumo.ttf', 40)
@@ -28,6 +28,12 @@ def create_code(request):
 
     io_obj = BytesIO()
     img.save(io_obj, 'png')
-    request.session['verification_code'] = code
+    request.session['captcha'] = code
 
     return io_obj.getvalue()
+
+
+def verify_captcha(request, captcha):
+    if captcha.upper() == request.session.get('captcha', '').upper():
+        return True
+    return False

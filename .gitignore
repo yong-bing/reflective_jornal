@@ -170,3 +170,4 @@ cython_debug/
 runs
 db.sqlite3
 db/
+custom_settings.py

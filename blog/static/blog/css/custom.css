@@ -10,24 +10,6 @@ body {
     padding: 0 2%;
 }
 
-
-#verification_code_img {
-    cursor: pointer;
-    float: left;
-}
-
-.login, .register {
-    width: 380px;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-    position: fixed;
-    top: 15%;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
 #NavbarRight {
     width: 320px;
 }

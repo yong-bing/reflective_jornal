@@ -1,0 +1,50 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'blog/css/auth.css' %}">
+{% endblock %}
+
+{% block title %}
+    <title>登录 | 映思漫记</title>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid auth-container">
+        <div class="auth-form">
+            <h2 class="auth-title">欢迎回来！</h2>
+            <form id="loginForm">
+                {% csrf_token %}
+                
+                {% for field in form %}
+                    <div class="mb-4">
+                        {{ field }}
+                        <div class="error-message" id="{{ field.id_for_label }}-error"></div>
+                    </div>
+                {% endfor %}
+                
+                <div class="mb-4 captcha-container">
+                    <label for="id_captcha"></label>
+                    <input type="text" class="form-control" id="id_captcha" name="captcha" placeholder="验证码"
+                           required>
+                    <img id="captcha-image" src="{% url 'get_captcha' %}" alt="验证码" title="点击刷新">
+                </div>
+                <div class="error-message" id="id_captcha-error"></div>
+                <div class="mb-4 form-check">
+                    <input type="checkbox" class="form-check-input" id="rememberMe" name="remember_me">
+                    <label class="form-check-label" for="rememberMe">记住我</label>
+                </div>
+                <button type="submit" class="btn btn-primary btn-auth w-100 mb-4">登录</button>
+            </form>
+            <div class="text-center links">
+                <a href="{% url 'reset_password' %}" class="text-decoration-none me-3">忘记密码?</a>
+                <a href="{% url 'register' %}" class="text-decoration-none">注册新账号</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'blog/js/auth.js' %}"></script>
+{% endblock %}
+

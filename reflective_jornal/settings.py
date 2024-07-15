@@ -157,6 +157,12 @@ MDEDITOR_CONFIGS = {
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}
+
 
 # Custom settings
 if custom_settings:
