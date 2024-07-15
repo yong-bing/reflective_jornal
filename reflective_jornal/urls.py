@@ -17,42 +17,43 @@ from django.contrib import admin
 from django.urls import path, re_path, include
 from django.views.static import serve
 
-from blog import views
+from blog.views import auth, generic, user, article
 from reflective_jornal import settings
 
 urlpatterns = [
     # Admin and login/logout paths
     path('admin/', admin.site.urls),
-    path('login/', views.login, name='login'),
-    path('logout/', views.logout, name='logout'),
+    path('login/', auth.login, name='login'),
+    path('logout/', auth.logout, name='logout'),
+    path('register/', auth.register, name='register'),
+    path('reset_password/', auth.reset_password, name='reset_password'),
+    path('reset_password/<uidb64>/<token>', auth.confirm_reset_password, name='confirm_reset_password'),
 
-    # Index and registration
-    path('', views.index, name='index'),
-    path('index/', views.index, name='index'),
-    path('register/', views.register, name='register'),
+    # Index
+    path('', generic.index, name='index'),
+    path('index/', generic.index, name='index'),
 
     # verification code
-    path('get_verification_code/', views.get_verification_code, name='get_verification_code'),
+    path('get_captcha/', generic.get_captcha, name='get_captcha'),
+
+    #
+    # article
+    path('article/delete/<int:nid>/', article.delete_article, name='delete_article'),
+    path('article/edit/', article.edit_article, name='create_article'),
+    path('article/edit/<int:nid>/', article.edit_article, name='edit_article'),
+    path('article/publish/<int:nid>/', article.publish_article, name='publish_article'),
+    #
+    # User
+    path('user/<str:username>/', user.homepage, name='personal_homepage'),
+    path('user/<str:username>/dashboard/', user.dashboard, name='dashboard'),
+    # re_path(r'^(?P<username>\w+)/articles/(?P<article_id>\d+)/$', views.article_detail, name='article_detail')
+    path('user/<str:username>/articles/<int:article_id>/', article.article_detail, name='article_detail'),
 
     # MDEditor
     path('mdeditor/', include('mdeditor.urls')),
 
     # Test path
-    path('test/', views.test, name='test'),
-
-    # User dashboard management
-    path('dashboard/', views.dashboard, name='dashboard'),
-
-    # User article management
-    path('article/delete/<int:nid>/', views.delete_article, name='delete_article'),
-    path('article/edit/', views.edit_article, name='create_article'),
-    path('article/edit/<int:nid>/', views.edit_article, name='edit_article'),
-    path('article/publish/<int:nid>/', views.publish_article, name='publish_article'),
-
-    # User homepage and articles
-    # re_path(r'^(?P<username>\w+)/$', views.homepage, name='homepage'),
-    re_path(r'^user/(?P<username>\w+)/$', views.homepage, name='homepage'),
-    re_path(r'^(?P<username>\w+)/articles/(?P<article_id>\d+)/$', views.article_detail, name='article_detail')
+    path('test/', generic.test, name='test'),
 
 ]
 

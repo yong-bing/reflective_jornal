@@ -1,0 +1,42 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'blog/css/auth.css' %}">
+{% endblock %}
+
+{% block title %}
+    <title>注册 | 映思漫记</title>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid auth-container">
+        <div class="auth-form">
+            <h2 class="auth-title">创建新账号</h2>
+            <form id="registerForm">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="mb-4">
+                        {{ field }}
+                        <div class="error-message" id="{{ field.id_for_label }}-error"></div>
+                    </div>
+                {% endfor %}
+                <div class="mb-4 captcha-container">
+                    <label for="id_captcha"></label>
+                    <input type="text" class="form-control" id="id_captcha" name="captcha" placeholder="验证码"
+                           required>
+                    <img id="captcha-image" src="{% url 'get_captcha' %}" alt="验证码" title="点击刷新">
+                </div>
+                <div class="error-message" id="id_captcha-error"></div>
+                <button type="submit" class="btn btn-primary btn-auth w-100 mb-4 mt-3">注册</button>
+            </form>
+            <div class="text-center links">
+                <a href="{% url 'login' %}" class="text-decoration-none">已有账号？登录</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'blog/js/auth.js' %}"></script>
+{% endblock %}

@@ -30,13 +30,13 @@
                         <a class="nav-link" href="#">个人资料</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/{{ request.user.username }}">我的主页</a>
+                        <a class="nav-link" href="{% url 'personal_homepage' request.user.username %}">我的主页</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/dashboard/">控制台</a>
+                        <a class="nav-link" href="{% url 'dashboard' request.user.username %}">控制台</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/logout/">注销登录</a>
+                        <a class="nav-link" href="{% url 'logout' %}">注销登录</a>
                     </li>
                 </ul>
             {% else %}
@@ -67,16 +67,16 @@
                 <a class="nav-link" aria-current="page" href="#">个人资料</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/{{ request.user.username }}">我的主页</a>
+                <a class="nav-link" href="{% url 'personal_homepage' request.user.username %}">我的主页</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/dashboard/">控制台</a>
+                <a class="nav-link" href="{% url 'dashboard' request.user.username%}">控制台</a>
             </li>
             <li class="nav-item">
                 <hr>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/logout/">注销登录</a>
+                <a class="nav-link" href="{% url 'logout' %}">注销登录</a>
             </li>
         </ul>
     </div>
