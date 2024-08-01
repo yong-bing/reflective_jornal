@@ -109,7 +109,7 @@ def send_reset_password_email(request, user):
     current_site = request.get_host()
     uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
     subject = '重置您的密码'
-    message = render_to_string('blog/components/reset_password_email.html', {
+    message = render_to_string('blog/components/email.html', {
         'user': user,
         'domain': current_site,
         'uid': uidb64,

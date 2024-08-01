@@ -122,7 +122,7 @@ $(document).ready(function () {
         let formData = new FormData(this);
 
         $.ajax({
-            url: '/reset_password/',
+            url: '/reset-password/',
             type: 'POST',
             data: formData,
             processData: false,
@@ -174,6 +174,6 @@ $(document).ready(function () {
 
     // 共用的刷新验证码函数
     function refreshCaptcha() {
-        $('#captcha-image').attr('src', '/get_captcha?' + new Date().getTime());
+        $('#captcha-image').attr('src', '/get-captcha?' + new Date().getTime());
     }
 });

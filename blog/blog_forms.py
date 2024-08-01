@@ -64,12 +64,12 @@ class UserLoginForm(forms.ModelForm):
 class ArticleCreateForm(forms.ModelForm):
     class Meta:
         model = Article
-        fields = ['title', 'content', 'status', 'user']
+        fields = ['title', 'content', 'status', 'author']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '请输入文章标题'}),
             'content': forms.Textarea(attrs={'class': 'form-control', 'placeholder': '请输入文章内容'}),
             'status': forms.HiddenInput(),
-            'user': forms.HiddenInput(),
+            'author': forms.HiddenInput(),
         }
 
     def __init__(self, *args, **kwargs):

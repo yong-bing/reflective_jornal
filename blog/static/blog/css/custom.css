@@ -1,9 +1,188 @@
-body {
-    background-color: #f8f9fa;
+:root {
+    --primary-color: #4a90e2;
+    --secondary-color: #f8f9fa;
+    --text-color: #333;
+    --bg-color: #ffffff;
+    --card-bg: #f9f9f9;
 }
 
+body {
+    font-family: 'Noto Serif SC', 'Segoe UI', 'Roboto', sans-serif, serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.mt-5-custom {
+    margin-top: 5rem;
+}
+
+/* 文章卡片 */
+/* 文章卡片中的按钮样式 */
+.article-card .btn-custom {
+    font-size: 0.85rem;
+    padding: 0.5rem 1.25rem;
+}
+
+.article-card {
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    background-color: #ffffff;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.article-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.article-card .card-img-wrapper {
+    position: relative;
+    padding-top: 56.25%; /* 16:9 宽高比 */
+    overflow: hidden;
+}
+
+.article-card .card-img-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.article-card:hover .card-img-top {
+    transform: scale(1.05);
+}
+
+.article-card .card-body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.article-card .card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-bottom: 0.75rem;
+}
+
+.article-card .card-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: var(--text-color);
+    line-height: 1.4;
+}
+
+.article-card .card-text {
+    font-size: 0.95rem;
+    color: #495057;
+    flex-grow: 1;
+    line-height: 1.6;
+}
+
+.article-card .card-footer {
+    padding: 1rem 1.5rem;
+    background-color: transparent;
+    border-top: 1px solid rgba(0, 0, 0, .125);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.article-card .tag-container {
+    margin-bottom: 0;
+}
+
+.article-card .tag {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    margin-right: 0.5rem;
+    background-color: #f1f3f5;
+    color: #495057;
+    border-radius: 50px;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+.article-card .tag:hover {
+    background-color: var(--primary-color);
+    color: #ffffff;
+}
+
+/* 通用按钮样式 */
+.btn-custom {
+    padding: 0.6rem 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #ffffff;
+    background-color: #4a90e2;
+    border: none;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.btn-custom:hover, .btn-custom:focus {
+    background-color: #3a7bd5;
+    color: #ffffff;
+    transform: translateY(-3px);
+    box-shadow: 0 7px 20px rgba(74, 144, 226, 0.4);
+    text-decoration: none;
+}
+
+.btn-custom:active {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 15px rgba(74, 144, 226, 0.3);
+}
+
+
+/* 登录按钮样式 */
+.btn-login {
+    background-color: #34c759;
+    box-shadow: 0 4px 15px rgba(52, 199, 89, 0.3);
+}
+
+.btn-login:hover, .btn-login:focus {
+    background-color: #2db84e;
+    box-shadow: 0 7px 20px rgba(52, 199, 89, 0.4);
+}
+
+.btn-join {
+    background-color: #ff9500;
+    box-shadow: 0 4px 15px rgba(255, 149, 0, 0.3);
+}
+
+.btn-join:hover, .btn-join:focus {
+    background-color: #e68600;
+    box-shadow: 0 7px 20px rgba(255, 149, 0, 0.4);
+}
+
+.btn-search {
+    background-color: #007aff;
+    box-shadow: 0 4px 15px rgba(0, 122, 255, 0.3);
+}
+
+
+/* ---------------------导航栏样式开始----------------------- */
 .navbar {
     box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
+    transition: all 0.3s ease;
 }
 
 .custom-container-fluid {
@@ -13,6 +192,7 @@ body {
 #NavbarRight {
     width: 320px;
 }
+
 .offcanvas {
     transition: transform 0.3s ease-in-out;
     will-change: transform;
@@ -35,32 +215,57 @@ body {
     margin: 0;
 }
 
-/* edit.html  */
-.custom-modal-dialog {
-    display: flex;
-    justify-content: center;
+.navbar-brand {
+    font-weight: 700;
+    color: var(--primary-color);
+    font-size: 1.5rem;
 }
 
-.custom-modal-size {
-    min-width: 770px; /* 默认情况下，最小宽度为100% */
-    min-height: 600px; /* 默认最小高度 */
+.nav-link {
+    font-weight: 500;
+    transition: color 0.3s ease;
 }
 
-#coverPreview {
-    width: 120px !important;
-    height: 100px !important;
+/* ---------------------导航栏样式结束----------------------- */
+
+
+/* ---------------------footer样式开始----------------------- */
+.footer {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    padding: 4rem 0;
+    margin-top: 4rem;
 }
 
-.cover .overlay-text {
-    position: absolute;
-    width: 75%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    background-color: rgba(0, 0, 0, 0.5);
-    padding: 10px;
-    border-radius: 5px;
-    text-align: center;
-    cursor: pointer;
+.footer a {
+    color: var(--primary-color);
+    transition: color 0.3s ease;
 }
+
+.footer a:hover {
+    color: #3a7bd5;
+    text-decoration: none;
+}
+
+.social-icons a {
+    font-size: 1.5rem;
+    margin-right: 1rem;
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.social-icons a:hover {
+    color: #3a7bd5;
+}
+
+.newsletter-form .form-control {
+    border-radius: 50px;
+    padding: 0.75rem 1.5rem;
+}
+
+.newsletter-form .btn {
+    border-radius: 50px;
+    padding: 0.75rem 2rem;
+}
+
+/* ---------------------footer样式结束----------------------- */

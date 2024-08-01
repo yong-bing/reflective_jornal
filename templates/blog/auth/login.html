@@ -1,4 +1,4 @@
-{% extends 'blog/base.html' %}
+{% extends 'blog/components/base.html' %}
 {% load static %}
 
 {% block style %}
@@ -9,20 +9,20 @@
     <title>登录 | 映思漫记</title>
 {% endblock %}
 
-{% block content %}
+{% block main %}
     <div class="container-fluid auth-container">
         <div class="auth-form">
             <h2 class="auth-title">欢迎回来！</h2>
             <form id="loginForm">
                 {% csrf_token %}
-                
+
                 {% for field in form %}
                     <div class="mb-4">
                         {{ field }}
                         <div class="error-message" id="{{ field.id_for_label }}-error"></div>
                     </div>
                 {% endfor %}
-                
+
                 <div class="mb-4 captcha-container">
                     <label for="id_captcha"></label>
                     <input type="text" class="form-control" id="id_captcha" name="captcha" placeholder="验证码"

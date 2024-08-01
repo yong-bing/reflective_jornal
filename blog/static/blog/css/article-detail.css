@@ -21,12 +21,6 @@
     position: relative;
     background: rgba(255, 255, 255, 0.8);
     border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.article-content {
-    margin: 2rem;
 }
 
 .article-content h1, .article-content h2, .article-content h3, .article-content h4, .article-content h5, .article-content h6 {

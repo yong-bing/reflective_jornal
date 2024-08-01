@@ -13,46 +13,13 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
 from django.urls import path, re_path, include
 from django.views.static import serve
 
-from blog.views import auth, generic, user, article
 from reflective_jornal import settings
 
 urlpatterns = [
-    # Admin and login/logout paths
-    path('admin/', admin.site.urls),
-    path('login/', auth.login, name='login'),
-    path('logout/', auth.logout, name='logout'),
-    path('register/', auth.register, name='register'),
-    path('reset_password/', auth.reset_password, name='reset_password'),
-    path('reset_password/<uidb64>/<token>', auth.confirm_reset_password, name='confirm_reset_password'),
-
-    # Index
-    path('', generic.index, name='index'),
-    path('index/', generic.index, name='index'),
-
-    # verification code
-    path('get_captcha/', generic.get_captcha, name='get_captcha'),
-
-    #
-    # article
-    path('article/delete/<int:nid>/', article.delete_article, name='delete_article'),
-    path('article/edit/', article.edit_article, name='create_article'),
-    path('article/edit/<int:nid>/', article.edit_article, name='edit_article'),
-    path('article/publish/<int:nid>/', article.publish_article, name='publish_article'),
-    #
-    # User
-    path('user/<str:username>/', user.homepage, name='personal_homepage'),
-    path('dashboard/', user.dashboard, name='dashboard'),
-    path('user/<str:username>/articles/<int:article_id>/', article.article_detail, name='article_detail'),
-
-    # MDEditor
-    path('mdeditor/', include('mdeditor.urls')),
-
-    # Test path
-    path('test/', generic.test, name='test'),
+    path('', include('blog.urls')),
 
 ]
 

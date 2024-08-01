@@ -1,12 +1,12 @@
-{% extends 'blog/base.html' %}
+{% extends 'blog/components/base.html' %}
 {% load static %}
 
 {% block nav %}
     {% include 'blog/components/nav.html' %}
 {% endblock %}
 
-{% block content %}
-    <div class="container-fluid">
+{% block main %}
+    <div class="container-fluid mt-5-custom">
         <div class="row">
 
             <!-- 左侧栏 -->
@@ -24,4 +24,12 @@
         </div>
 
     </div>
+{% endblock %}
+
+{% block footer %}
+    {% include 'blog/components/footer.html' %}
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'blog/js/nav.js' %}"></script>
 {% endblock %}

@@ -1,24 +1,27 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-white sticky-top">
+<nav class="navbar navbar-expand-lg fixed-top">
     <div class="container-fluid custom-container-fluid">
-        <a class="navbar-brand fw-bold" href="#">映思漫记</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <a class="navbar-brand fw-bold" href="#">BinLab</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item"><a class="nav-link" href="/">首页</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">分类</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">关于</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">联系</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'category' %}">分类</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">精选文章</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">最新文章</a></li>
             </ul>
             <form class="d-flex me-2">
                 <input class="form-control me-2" type="search" placeholder="搜索文章..." aria-label="Search">
-                <button class="btn btn-outline-primary" type="submit" aria-label="搜索"><i class="bi bi-search"></i></button>
+                <button class="btn btn-custom btn-search" type="submit" aria-label="搜索"><i class="bi bi-search"></i>
+                </button>
             </form>
             {% if request.user.is_authenticated %}
                 <!-- 大屏幕显示头像和弹出菜单 -->
                 <div class="d-none d-lg-block">
-                    <button class="btn btn-link p-0 border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#NavbarRight"
+                    <button class="btn btn-link p-0 border-0" type="button" data-bs-toggle="offcanvas"
+                            data-bs-target="#NavbarRight"
                             aria-controls="NavbarRight" aria-label="用户菜单">
                         <img src="{{ MEDIA_URL }}{{ request.user.avatar }}" alt="{{ request.user.username }}" width="32"
                              height="32" class="rounded-circle" loading="lazy">
@@ -40,45 +43,42 @@
                     </li>
                 </ul>
             {% else %}
-                <div class="d-flex">
-                    <a href="/login/" class="btn btn-outline-primary me-2">登录</a>
-                    <a href="/register/" class="btn btn-outline-primary">注册</a>
-                </div>
+                <a href="/login/" class="btn btn-custom btn-login me-2">登录/注册</a>
             {% endif %}
         </div>
     </div>
 </nav>
 
 {% if request.user.is_authenticated %}
-<!-- 右侧弹出的用户菜单 -->
-<div class="offcanvas offcanvas-end" tabindex="-1" id="NavbarRight" aria-labelledby="NavbarRightLabel">
-    <div class="offcanvas-header">
-        <img src="{{ MEDIA_URL }}{{ request.user.avatar }}" alt="{{ request.user.username }}" width="36"
-             height="36" class="rounded-circle me-3" loading="lazy">
-        <div class="user-info">
-            <h4 class="offcanvas-title" id="NavbarRightLabel">{{ request.user.username }}</h4>
-            <p class="user-email">{{ request.user.email }}</p>
+    <!-- 右侧弹出的用户菜单 -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="NavbarRight" aria-labelledby="NavbarRightLabel">
+        <div class="offcanvas-header">
+            <img src="{{ MEDIA_URL }}{{ request.user.avatar }}" alt="{{ request.user.username }}" width="36"
+                 height="36" class="rounded-circle me-3" loading="lazy">
+            <div class="user-info">
+                <h4 class="offcanvas-title" id="NavbarRightLabel">{{ request.user.username }}</h4>
+                <p class="user-email">{{ request.user.email }}</p>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        <div class="offcanvas-body rounded-start-2">
+            <ul class="navbar-nav flex-grow-1 pe-3">
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="#">个人资料</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'personal_homepage' request.user.username %}">我的主页</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'dashboard' %}">控制台</a>
+                </li>
+                <li class="nav-item">
+                    <hr>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">注销登录</a>
+                </li>
+            </ul>
+        </div>
     </div>
-    <div class="offcanvas-body rounded-start-2">
-        <ul class="navbar-nav flex-grow-1 pe-3">
-            <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="#">个人资料</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'personal_homepage' request.user.username %}">我的主页</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'dashboard' %}">控制台</a>
-            </li>
-            <li class="nav-item">
-                <hr>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'logout' %}">注销登录</a>
-            </li>
-        </ul>
-    </div>
-</div>
 {% endif %}

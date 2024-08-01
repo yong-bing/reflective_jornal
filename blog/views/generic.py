@@ -7,13 +7,17 @@ from blog.utils.captcha import create_captcha
 
 def index(request):
     # 查询所有已发表的文章 status=0
-    articles = models.Article.objects.filter(status=1).order_by('-created_time')
+    # articles = models.Article.objects.filter(status=1).order_by('-created_time')
 
-    # articles = models.Article.objects.all().order_by('-created_time')
+    featured_articles = models.Article.objects.filter(status=1).order_by('-views')[:3]
+
+    latest_articles = models.Article.objects.filter(status=1).order_by('-created_time')[:3]
+
     categories = models.Category.objects.all()
 
     context = {
-        'articles': articles,
+        'featured_articles': featured_articles,
+        'latest_articles': latest_articles,
         'categories': categories,
     }
 
@@ -26,5 +30,8 @@ def get_captcha(request):
 
 
 def test(request):
-    print(request.get_host())
-    return render(request, 'blog/article-admin.html',)
+    articles = models.Article.objects.filter(status=1).all()
+    context = {
+        'articles': articles,
+    }
+    return render(request, 'blog/test.html', context)

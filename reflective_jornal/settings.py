@@ -17,7 +17,6 @@ try:
 except ImportError:
     custom_settings = None
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -162,7 +161,6 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
     }
 }
-
 
 # Custom settings
 if custom_settings:

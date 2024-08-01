@@ -5,7 +5,7 @@ from blog import models
 
 
 def homepage(request, username):
-    articles = models.Article.objects.filter(user__username=username)
+    articles = models.Article.objects.filter(author__username=username)
     context = {
         'username': username,
         'articles': articles
@@ -15,7 +15,7 @@ def homepage(request, username):
 
 @login_required
 def dashboard(request):
-    articles = models.Article.objects.filter(user=request.user)
+    articles = models.Article.objects.filter(author=request.user)
     draft_count = articles.filter(status=0).count()
     published_count = articles.filter(status=1).count()
     context = {

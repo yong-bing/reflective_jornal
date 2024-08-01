@@ -16,6 +16,4 @@ RUN pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 COPY . .
 RUN chmod +x /app/entrypoint.sh
 
-EXPOSE 80
-
 ENTRYPOINT ["/app/entrypoint.sh"]

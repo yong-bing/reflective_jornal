@@ -1,4 +1,4 @@
-{% extends 'blog/layout_two_column.html' %}
+{% extends 'blog/components/layout_two_column.html' %}
 {% load static %}
 
 {% block column-left %}
@@ -41,7 +41,7 @@
 {% endblock %}
 
 {% block column-right %}
-    <div class="container py-4">
+    <div class="container pt-4">
         <h2 class="mb-4">仪表盘</h2>
         <div class="row g-4 mb-4">
             <div class="col-md-4">
@@ -84,12 +84,12 @@
                 </div>
             </div>
         </div>
-        
+
         <h2 class="mb-4">我的文章</h2>
         <div class="card border-0 shadow-sm">
-{#            <div class="card-header bg-white">#}
-{#                <h5 class="card-title mb-0">我的文章</h5>#}
-{#            </div>#}
+            {#            <div class="card-header bg-white">#}
+            {#                <h5 class="card-title mb-0">我的文章</h5>#}
+            {#            </div>#}
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-hover align-middle">
