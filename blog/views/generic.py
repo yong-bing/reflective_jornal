@@ -1,8 +1,6 @@
-from django.http import HttpResponse
 from django.shortcuts import render
 
 from blog import models
-from blog.utils.captcha import create_captcha
 
 
 def index(request):
@@ -24,14 +22,14 @@ def index(request):
     return render(request, 'blog/index.html', context)
 
 
-def get_captcha(request):
-    code = create_captcha(request)
-    return HttpResponse(code, content_type='image/png')
-
-
 def test(request):
     articles = models.Article.objects.filter(status=1).all()
+    categories = ['Python', 'Django', ]
+    categories = ','.join(categories)
     context = {
         'articles': articles,
+        'categories': categories,
+        'all_categories': ['Python', 'Django', 'Flask', 'Java', 'Spring', 'Spring Boot', 'Vue.js', 'React.js',
+                           'Angular.js'],
     }
     return render(request, 'blog/test.html', context)

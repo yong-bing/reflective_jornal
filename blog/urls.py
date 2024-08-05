@@ -1,6 +1,6 @@
 from django.urls import path, include
 
-from blog.views import auth, generic, article, user
+from blog.views import auth, generic, article, user, api
 
 urlpatterns = [
     # Admin and login/logout paths
@@ -15,16 +15,12 @@ urlpatterns = [
     path('', generic.index, name='index'),
     path('index/', generic.index, name='index'),
 
-    # verification code
-    path('get-captcha/', generic.get_captcha, name='get_captcha'),
-
     # article
     path('article/delete/<str:article_id>/', article.delete_article, name='delete_article'),
     path('article/edit/', article.edit_article, name='create_article'),
     path('article/edit/<str:article_id>/', article.edit_article, name='edit_article'),
     path('article/publish/<str:article_id>/', article.publish_article, name='publish_article'),
     path('article/category/', article.category, name='category'),
-    path('article/gabc/', article.get_articles_by_category, name='get_articles_bc'),
 
     # User
     path('user/<str:username>/', user.homepage, name='personal_homepage'),
@@ -36,4 +32,9 @@ urlpatterns = [
 
     # Test path
     path('test/', generic.test, name='test'),
+
+    # API
+    path('api/get-articles/', api.get_articles_by_category, name='get_articles_bc'),
+    # verification code
+    path('api/get-captcha/', api.get_captcha, name='get_captcha'),
 ]

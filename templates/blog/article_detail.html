@@ -75,7 +75,7 @@
                                     <img src="{% static comment.user.avatar %}" class="rounded-circle me-3" width="50"
                                          height="50" alt="User Avatar">
                                     <div>
-                                        <h6 class="mb-1">{{ comment.author.username }}</h6>
+                                        <h6 class="mb-1">{{ comment.user.username }}</h6>
                                         <p class="mb-1">{{ comment.content }}</p>
                                         <small class="text-muted">{{ comment.created_time|date:"Y-m-d H:i" }}</small>
                                     </div>
@@ -116,13 +116,13 @@
                         <!-- 标签云卡片 -->
                         <div class="card mb-4">
                             <div class="card-header">
-                                <h5 class="mb-0">标签云</h5>
+                                <h5 class="mb-0">标签</h5>
                             </div>
                             <div class="card-body">
                                 {% for tag in article.tags.all %}
-                                    <a href="{% url 'tag_articles' tag.slug %}"
+                                    <a href="#"
                                        class="btn btn-outline-secondary btn-sm mb-2 me-2">
-                                        {{ tag.name }}
+                                        {{ tag.content }}
                                     </a>
                                 {% empty %}
                                     <p class="text-muted">暂无标签</p>

@@ -174,6 +174,6 @@ $(document).ready(function () {
 
     // 共用的刷新验证码函数
     function refreshCaptcha() {
-        $('#captcha-image').attr('src', '/get-captcha?' + new Date().getTime());
+        $('#captcha-image').attr('src', 'api/get-captcha?' + new Date().getTime());
     }
 });

@@ -6,28 +6,42 @@
     <title></title>
     <link rel="stylesheet" href="{% static 'plugins/bootstrap-5.3.3/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'blog/css/custom.css' %}">
+    <script src="{% static 'plugins/tagify-4.27.0/tagify.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'plugins/tagify-4.27.0/tagify.css' %}" type="text/css"/>
     <script src="{% static 'plugins/jquery-3.7.1/jquery-3.7.1.min.js' %}"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css"
-          integrity="sha384-wcIxkf4k558AjM3Yz3BBFQUbk/zgIYC2R0QpeeYb+TwlBVMrlgLqwRjRtGZiK7ww" crossorigin="anonymous">
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js"
-            integrity="sha384-hIoBPJpTUs74ddyc4bFZSM1TVlQDA60VBbJS0oA934VSz82sBx1X7kSx2ATBDIyd"
-            crossorigin="anonymous"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/contrib/auto-render.min.js"
-            integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk"
-            crossorigin="anonymous"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            renderMathInElement(document.body, {
-                delimiters: [
-                    {left: '$$', right: '$$', display: true},
-                    {left: '$', right: '$', display: false},
-                    {left: '\\(', right: '\\)', display: false},
-                    {left: '\\[', right: '\\]', display: true}
-                ],
-                throwOnError: false
-            });
-        });
-    </script>
+    <style>
+        .tags-look .tagify__dropdown__item{
+            display: inline-block;
+            vertical-align: middle;
+            border-radius: 3px;
+            padding: .3em .5em;
+            border: 1px solid #CCC;
+            background: #F3F3F3;
+            margin: .2em;
+            font-size: .85em;
+            color: black;
+            transition: 0s;
+        }
+        
+        .tags-look .tagify__dropdown__item--active{
+            border-color: black;
+        }
+        
+        .tags-look .tagify__dropdown__item:hover{
+            background: lightyellow;
+            border-color: gold;
+        }
+        
+        .tags-look .tagify__dropdown__item--hidden {
+            max-width: 0;
+            max-height: initial;
+            padding: .3em 0;
+            margin: .2em 0;
+            white-space: nowrap;
+            text-indent: -20px;
+            border: 0;
+        }
+    </style>
 </head>
 <body>
 <div class="container-fluid">
@@ -42,18 +56,17 @@
                     {{ create_form.title }}
                 </div>
                 <div class="col-auto">
-                    <button type="button" id="saveDraft" class="btn btn-secondary">存为草稿</button>
-                    <button type="button" id="publishButton" class="btn btn-primary">发布</button>
+                    <button type="button" id="saveDraft" class="btn btn-custom btn-secondary ">存为草稿</button>
+                    <button type="button" id="publishButton" class="btn btn-custom btn-join ">发布</button>
                 </div>
             </div>
             <div class="mb-3">
                 {{ create_form.content }}
             </div>
-            {{ create_form.user }}
+            {{ create_form.author }}
             {{ create_form.status }}
         </form>
 
-        <!-- Modal -->
         <div class="modal fade" id="publishModal" tabindex="-1" aria-labelledby="publishModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable custom-modal-dialog">
                 <div class="modal-content custom-modal-size">
@@ -64,27 +77,33 @@
                     <div class="modal-body">
                         <form id="articlePublishForm">
                             {% csrf_token %}
-                            <input type="hidden" name="nid" id="articleNid"
-                                   value="{% if article %}{{ article.nid }}{% endif %}">
-                            <div class="mb-3 row">
-                                <label for="description" class="col-sm-2 col-form-label">文章摘要</label>
-                                <div class="col-sm-10">
-                                    {{ publish_form.desc }}
-                                </div>
-                            </div>
-                            <div class="mb-3 row align-items-center">
-                                <label class="col-sm-2 col-form-label">文章封面</label>
-                                <div class="col-sm-4">
-                                    <div class="position-relative d-inline-block cover">
-                                        <img src="{{ MEDIA_URL }}{{ publish_form.cover.value }}" alt="cover"
-                                             id="coverPreview"
-                                             class="img-fluid rounded" style="cursor: pointer;">
-                                        <div class="overlay-text" id="coverOverlayText">点击上传</div>
-                                        {{ publish_form.cover }}
+                            <input type="hidden" name="nid" id="articleNid" value="{{ article.nid|default:'' }}">
+
+                            {% for field in publish_form %}
+                                {% if field.name != 'status' %}
+                                    <div class="mb-3 row {% if field.name == 'cover' %}align-items-center{% endif %}">
+                                        <label for="{{ field.id_for_label }}" class="col-sm-2 col-form-label">
+                                            {{ field.label }}
+                                        </label>
+                                        <div class="col-sm-{% if field.name == 'cover' %}4{% else %}10{% endif %}">
+                                            {% if field.name == 'cover' %}
+                                                <div class="position-relative d-inline-block cover">
+                                                    <img src="
+                                                            {{ MEDIA_URL }}{{ field.value|default:'covers/default.jpg' }}"
+                                                         alt="cover" id="coverPreview" class="img-fluid rounded"
+                                                         style="cursor: pointer;">
+                                                    <div class="overlay-text" id="coverOverlayText">点击上传</div>
+                                                    {{ field }}
+                                                </div>
+                                            {% else %}
+                                                {{ field }}
+                                            {% endif %}
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            <button type="button" class="btn btn-primary" id="confirmPublish">发布</button>
+                                {% endif %}
+                            {% endfor %}
+
+                            <button type="button" class="btn btn-login btn-custom pull-right mt-3" id="confirmPublish">发布</button>
                             {{ publish_form.status }}
                         </form>
                     </div>
@@ -93,12 +112,32 @@
         </div>
         <!-- Modal Backdrop -->
         <div class="modal-backdrop fade" id="modalBackdrop"></div>
-
+        <div class="toast-container position-fixed bottom-0 end-0 p-3"></div>
     </div>
 </div>
 
 <script>
+
     let publishArticleUrl = '{% url "publish_article" 0 %}';
+    $(document).ready(function (){
+        function initTagify(inputId, whitelist, maxTags) {
+            let input = $(`input[name="${inputId}"]`)[0];
+            let tagify = new Tagify(input, {
+                whitelist: whitelist,
+                maxTags: maxTags,
+                dropdown: {
+                    maxItems: 10,
+                    classname: "tags-look",
+                    enabled: 0,
+                    closeOnSelect: false
+                }
+            });
+        }
+        // 初始化分类和标签输入框
+        initTagify('categories', {{ all_categories | safe }}, 3);
+        initTagify('tags', {{ all_tags | safe }}, 3);
+    });
+
 </script>
 <script src="{% static 'blog/js/editor.js' %}"></script>
 </body>

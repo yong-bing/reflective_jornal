@@ -87,9 +87,6 @@
 
         <h2 class="mb-4">我的文章</h2>
         <div class="card border-0 shadow-sm">
-            {#            <div class="card-header bg-white">#}
-            {#                <h5 class="card-title mb-0">我的文章</h5>#}
-            {#            </div>#}
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-hover align-middle">
@@ -105,7 +102,7 @@
                         {% for article in articles %}
                             <tr>
                                 <td><a class="text-decoration-none"
-                                       href="{% url 'article_detail' article.user.username article.nid %}">{{ article.title }}</a>
+                                       href="{% url 'article_detail' article.author.username article.nid %}">{{ article.title }}</a>
                                 </td>
                                 <td>{{ article.created_time|date:"Y-m-d H:i" }}</td>
                                 <td>
@@ -114,23 +111,19 @@
                                 </span>
                                 </td>
                                 <td>
-                                    <a class="text-decoration-none" href="{% url 'edit_article' article.nid %}">
-                                        <button class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="tooltip"
-                                                title="编辑">
-                                            <i class="bi bi-pencil"></i>
-                                        </button>
-                                    </a>
-                                    <a href="#" onclick="deleteArticle({{ article.nid }}); return false;">
-                                        <button class="btn btn-sm btn-outline-danger delete-article"
-                                                data-bs-toggle="tooltip" title="删除"
-                                                data-article-id="{{ article.nid }}">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </a>
-                                    <form id="delete-form-{{ article.nid }}" method="post"
-                                          action="{% url 'delete_article' article.nid %}" style="display: none;">
-                                        {% csrf_token %}
-                                    </form>
+                                    <button class="btn btn-sm btn-outline-primary me-1 edit-article"
+                                            data-bs-toggle="tooltip"
+                                            title="编辑"
+                                            data-article-id="{{ article.nid }}">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    {% csrf_token %}
+                                    <button class="btn btn-sm btn-outline-danger delete-article"
+                                            data-bs-toggle="tooltip"
+                                            title="删除"
+                                            data-article-id="{{ article.nid }}">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
                                 </td>
                             </tr>
                         {% empty %}
@@ -150,6 +143,7 @@
 {% endblock %}
 
 {% block script %}
+    <script src="{% static 'blog/js/nav.js' %}"></script>
     <script>
         $(document).ready(function () {
             // 侧边栏菜单激活效果
@@ -171,14 +165,46 @@
             const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
                 return new bootstrap.Tooltip(tooltipTriggerEl);
             });
-        });
 
-        // 删除文章功能
-        function deleteArticle(articleId) {
-            if (confirm('确定要删除这篇文章吗？')) {
-                document.getElementById('delete-form-' + articleId).submit();
-            }
-        }
+            let csrftoken = '{{ csrf_token }}'
+
+            $.ajaxSetup({
+                beforeSend: function (xhr, settings) {
+                    if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
+
+            // 编辑文章
+            $('.edit-article').on('click', function () {
+                let articleId = $(this).data('article-id');
+                window.location.href = '/article/edit/' + articleId + '/';
+            });
+
+            // 删除文章
+            $('.delete-article').on('click', function () {
+                let articleId = $(this).data('article-id');
+                if (confirm('确定要删除这篇文章吗？')) {
+                    $.ajax({
+                        url: '/article/delete/' + articleId + '/',
+                        type: 'POST',
+                        dataType: 'json',
+                        success: function (data) {
+                            if (data.status === 'success') {
+                                location.reload();
+                            } else {
+                                alert('删除失败，请重试。');
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            alert('删除失败，请重试。');
+                        }
+                    });
+                }
+            });
+
+        });
     </script>
 {% endblock %}
 

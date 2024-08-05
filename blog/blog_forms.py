@@ -1,6 +1,8 @@
+import json
+
 from django import forms
 
-from blog.models import User, Article
+from blog.models import User, Article, Category, Tag
 
 
 class UserRegisterForm(forms.Form):
@@ -73,13 +75,13 @@ class ArticleCreateForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user')
+        self.author = kwargs.pop('author')
         super(ArticleCreateForm, self).__init__(*args, **kwargs)
-        self.fields['user'].initial = self.user
+        self.fields['author'].initial = self.author
 
     def save(self, commit=True):
         instance = super(ArticleCreateForm, self).save(commit=False)
-        instance.user = self.user
+        instance.author = self.author
         instance.status = 0
         if commit:
             instance.save()
@@ -87,18 +89,58 @@ class ArticleCreateForm(forms.ModelForm):
 
 
 class ArticlePublishForm(forms.ModelForm):
+    categories = forms.CharField(required=False, widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': '请输入文章分类，多个分类用英文逗号分隔...'
+    }), label='文章分类')
+    tags = forms.CharField(required=False, widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'placeholder': '请输入文章标签，多个标签用英文逗号分隔...'
+    }), label='文章标签')
+
     class Meta:
         model = Article
-        fields = ['desc', 'cover', 'status']
+        fields = ['desc', 'cover', 'status', 'categories', 'tags']
         widgets = {
-            'desc': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '请输入文章摘要...'}),
+            'desc': forms.Textarea(
+                attrs={
+                    'class': 'form-control', 'placeholder': '请输入文章摘要...', 'rows': 3, 'style': 'resize:vertical'
+                }),
             'cover': forms.FileInput(attrs={'class': 'd-none', 'id': 'coverUpload'}),
             'status': forms.HiddenInput(),
         }
+        labels = {
+            'desc': '文章摘要',
+            'cover': '文章封面',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance.pk:
+            self.initial['categories'] = ', '.join(c.content for c in self.instance.categories.all())
+            self.initial['tags'] = ', '.join(t.content for t in self.instance.tags.all())
+        else:
+            self.initial['categories'] = ''
+            self.initial['tags'] = ''
 
     def save(self, commit=True):
-        instance = super(ArticlePublishForm, self).save(commit=False)
-        instance.status = 1
+        instance = super().save(commit=False)
+        instance.status = 1  # 设置为已发布状态
         if commit:
             instance.save()
+
+            # 处理分类
+            instance.categories.clear()
+            categories = json.loads(self.cleaned_data['categories'])
+            for item in categories:
+                cat, created = Category.objects.get_or_create(content=item['value'])
+                instance.categories.add(cat)
+
+            # 处理标签
+            instance.tags.clear()
+            tags = json.loads(self.cleaned_data['tags'])
+            for item in tags:
+                tag, created = Tag.objects.get_or_create(content=item['value'])
+                instance.tags.add(tag)
+
         return instance

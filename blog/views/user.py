@@ -5,7 +5,7 @@ from blog import models
 
 
 def homepage(request, username):
-    articles = models.Article.objects.filter(author__username=username)
+    articles = models.Article.objects.filter(author__username=username, status=1)
     context = {
         'username': username,
         'articles': articles

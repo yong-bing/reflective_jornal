@@ -132,8 +132,9 @@
                             </div>
                             <div class="card-footer">
                                 <div class="tag-container">
-                                    <span class="tag">人工智能</span>
-                                    <span class="tag">软件开发</span>
+                                    {% for tag in article.tags.all %}
+                                        <span class="tag">{{ tag.content }}</span>
+                                    {% endfor %}
                                 </div>
                                 <a href="{% url 'article_detail' article.author.username article.nid %}"
                                    class="btn btn-custom btn-sm">阅读全文</a>
@@ -167,8 +168,9 @@
                             </div>
                             <div class="card-footer">
                                 <div class="tag-container">
-                                    <span class="tag">人工智能</span>
-                                    <span class="tag">软件开发</span>
+                                    {% for tag in article.tags.all %}
+                                        <span class="tag">{{ tag.content }}</span>
+                                    {% endfor %}
                                 </div>
                                 <a href="{% url 'article_detail' article.author.username article.nid %}"
                                    class="btn btn-custom btn-sm">阅读全文</a>
